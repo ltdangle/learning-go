@@ -7,11 +7,14 @@ import (
 )
 
 func main() {
-
+//comment 1
 	if len(os.Args) == 1 {
 		fmt.Println("Need input in __02 January 2006 15:04 MST__ format!")
 		return
 	}
+//comment 2
+
+//comment 3
 
 	input := os.Args[1]
 	now, err := time.Parse("02 January 2006 15:04 MST", input)
