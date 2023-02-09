@@ -12,6 +12,7 @@ func InitializeEvent() Event {
 	message := NewMessage()
 	greeter := NewGreeter(message)
 	person := NewPerson()
-	event := NewEvent(greeter, person)
+	mainGeometry := NewGeometry()
+	event := NewEvent(greeter, person, mainGeometry)
 	return event
 }
