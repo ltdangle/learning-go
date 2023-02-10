@@ -11,7 +11,7 @@ func InitializeEvent() Event {
 		NewEvent,
 		NewGreeter,
 		NewMessage,
-		wire.Bind(new(geometry), new(circle)),
+		wire.Bind(new(GeometryI), new(circle)),
 		NewCircle)
 	return Event{}
 }

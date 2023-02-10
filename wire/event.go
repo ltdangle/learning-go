@@ -5,10 +5,10 @@ import "fmt"
 type Event struct {
 	Greeter  Greeter // <- adding a Greeter field
 	Person   Person
-	Geometry geometry
+	Geometry GeometryI
 }
 
-func NewEvent(g Greeter, p Person, gm geometry) Event {
+func NewEvent(g Greeter, p Person, gm GeometryI) Event {
 	return Event{Greeter: g, Person: p, Geometry: gm}
 }
 func (this Event) Start() {
