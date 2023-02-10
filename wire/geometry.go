@@ -36,7 +36,7 @@ func measure(g geometry) {
 	fmt.Println(g.area())
 	fmt.Println(g.perim())
 }
-func NewGeometry() geometry {
+func NewCircle() circle{
 	return circle{radius: 5}
 	// return rect{width: 3, height: 4}
 
