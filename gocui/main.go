@@ -54,7 +54,7 @@ func layout(gui *gocui.Gui) error {
 	// main section (contains accounts, emails, preview)
 	mainViewStartX := 0
 	mainViewStartY := 0
-	mainViewEndX := winX - 1
+	mainViewEndX := winX - 10
 	mainViewEndY := winY - 4
 	// bottom section
 	bottomStartX := 0
