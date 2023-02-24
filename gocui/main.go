@@ -11,8 +11,15 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
+const (
+	ACCOUNTS_VIEW = "accounts view"
+	EMAILS_VIEW   = "emails view"
+	PREVIEW_VIEW  = "preview view"
+	BOTTOM_VIEW   = "bottom view"
+)
+
 var (
-	viewArr = []string{"v1", "v2", "v3", "v4"}
+	viewArr = []string{ACCOUNTS_VIEW, EMAILS_VIEW, PREVIEW_VIEW, BOTTOM_VIEW}
 	active  = 0
 )
 
@@ -27,7 +34,7 @@ func nextView(g *gocui.Gui, v *gocui.View) error {
 	nextIndex := (active + 1) % len(viewArr)
 	name := viewArr[nextIndex]
 
-	out, err := g.View("v2")
+	out, err := g.View(PREVIEW_VIEW)
 	if err != nil {
 		return err
 	}
@@ -78,7 +85,7 @@ func layout(gui *gocui.Gui) error {
 	previewEndX := mainViewEndX
 	previewEndY := mainViewEndY
 
-	if accountsV, err := gui.SetView("v1", accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	if accountsV, err := gui.SetView(ACCOUNTS_VIEW, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -86,12 +93,12 @@ func layout(gui *gocui.Gui) error {
 		accountsV.Editable = true
 		accountsV.Wrap = true
 
-		if _, err = setCurrentViewOnTop(gui, "v1"); err != nil {
+		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
 			return err
 		}
 	}
 
-	if emailsV, err := gui.SetView("v2", emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if emailsV, err := gui.SetView(EMAILS_VIEW, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -100,14 +107,14 @@ func layout(gui *gocui.Gui) error {
 		emailsV.Autoscroll = true
 		emailsV.Editable = true
 	}
-	if previewV, err := gui.SetView("v3", previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
+	if previewV, err := gui.SetView(PREVIEW_VIEW, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 		previewV.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
 		previewV.Editable = true
 	}
-	if bottomV, err := gui.SetView("v4", bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
+	if bottomV, err := gui.SetView(BOTTOM_VIEW, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
