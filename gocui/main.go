@@ -74,7 +74,9 @@ func layout(gui *gocui.Gui) error {
 	emailsEndY := mainViewEndY
 	// email preview view
 	previewStartX := emailsEndX + 1
-	previewEndX := winX
+    previewStartY:=mainViewStartY
+	previewEndX :=mainViewEndX
+
 
 	if accountsV, err := gui.SetView("v1", accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		if err != gocui.ErrUnknownView {
@@ -98,7 +100,7 @@ func layout(gui *gocui.Gui) error {
 		emailsV.Autoscroll = true
 		emailsV.Editable = true
 	}
-	if v3, err := gui.SetView("v3", previewStartX, 0, previewEndX-1, bottomStartY-1); err != nil {
+	if v3, err := gui.SetView("v3", previewStartX, previewStartY, previewEndX-1, bottomStartY-1); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
