@@ -69,9 +69,11 @@ func layout(gui *gocui.Gui) error {
 	accountsEndY := mainViewEndY
 	// emails list view
 	emailsStartX := accountsEndX + 1
-	emailsEndX := winX / 10 * 5
+	emailsStartY := mainViewStartY
+	emailsEndX := mainViewEndX / 10 * 5
+	emailsEndY := mainViewEndY
 	// email preview view
-	previewStartX := emailsEndX
+	previewStartX := emailsEndX + 1
 	previewEndX := winX
 
 	if accountsV, err := gui.SetView("v1", accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
@@ -87,7 +89,7 @@ func layout(gui *gocui.Gui) error {
 		}
 	}
 
-	if emailsV, err := gui.SetView("v2", emailsStartX, 0, emailsEndX-1, bottomStartY-1); err != nil {
+	if emailsV, err := gui.SetView("v2", emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
