@@ -59,7 +59,7 @@ func layout(gui *gocui.Gui) error {
 	// bottom section
 	bottomStartX := 0
 	bottomStartY := mainViewEndY + 1
-	bottomEndEx := winX - 1
+	bottomEndX := winX - 1
 	bottomEndY := winY - 1
 
 	// accounts view
@@ -104,14 +104,14 @@ func layout(gui *gocui.Gui) error {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v3.Title = strconv.Itoa(previewEndX) + " Preview"
+		v3.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
 		v3.Editable = true
 	}
-	if v4, err := gui.SetView("v4", bottomStartX, bottomStartY, bottomEndEx, bottomEndY); err != nil {
+	if v4, err := gui.SetView("v4", bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v4.Title = strconv.Itoa(winX-1) + " Log"
+		v4.Title = strconv.Itoa(bottomStartX) + " - " + strconv.Itoa(bottomEndX) + " Log"
 		v4.Editable = true
 	}
 	return nil
