@@ -100,19 +100,19 @@ func layout(gui *gocui.Gui) error {
 		emailsV.Autoscroll = true
 		emailsV.Editable = true
 	}
-	if v3, err := gui.SetView("v3", previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
+	if previewV, err := gui.SetView("v3", previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v3.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
-		v3.Editable = true
+		previewV.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
+		previewV.Editable = true
 	}
-	if v4, err := gui.SetView("v4", bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
+	if bottomV, err := gui.SetView("v4", bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		v4.Title = strconv.Itoa(bottomStartX) + " - " + strconv.Itoa(bottomEndX) + " Log"
-		v4.Editable = true
+		bottomV.Title = strconv.Itoa(bottomStartX) + " - " + strconv.Itoa(bottomEndX) + " Log"
+		bottomV.Editable = true
 	}
 	return nil
 }
