@@ -21,6 +21,7 @@ const (
 var (
 	viewArr = []string{ACCOUNTS_VIEW, EMAILS_VIEW, PREVIEW_VIEW, BOTTOM_VIEW}
 	active  = 0
+	Items   = []string{"one", "two", "three", "four", "five"}
 )
 
 func setCurrentViewOnTop(g *gocui.Gui, name string) (*gocui.View, error) {
@@ -28,6 +29,28 @@ func setCurrentViewOnTop(g *gocui.Gui, name string) (*gocui.View, error) {
 		return nil, err
 	}
 	return g.SetViewOnTop(name)
+}
+
+func maximizePreview(g *gocui.Gui, v *gocui.View) error {
+	bottomV, err := g.View(BOTTOM_VIEW)
+	if err != nil {
+		return err
+	}
+
+	bottomV.Clear()
+	//fmt.Fprintln(bottomV, "maximizePreview")
+
+	maxPreviewV, err := g.SetView("MAXIMIZE_PREVIEW", 1, 1, 40, 20)
+	maxPreviewV.Wrap = true
+	maxPreviewV.Autoscroll = true
+	maxPreviewV.Editable = true
+
+	fmt.Fprintln(bottomV, err)
+
+	_, err = setCurrentViewOnTop(g, "MAXIMIZE_PREVIEW")
+	//_, err = g.SetViewOnTop("MAXIMIZE_PREVIEW")
+	//setCurrentViewOnTop(g, PREVIEW_VIEW)
+	return err
 }
 
 func nextView(g *gocui.Gui, v *gocui.View) error {
@@ -39,7 +62,7 @@ func nextView(g *gocui.Gui, v *gocui.View) error {
 		return err
 	}
 
-    out.Clear()
+	out.Clear()
 	fmt.Fprintln(out, "Going from view "+v.Name()+" to "+name)
 
 	if _, err := setCurrentViewOnTop(g, name); err != nil {
@@ -92,10 +115,26 @@ func layout(gui *gocui.Gui) error {
 			return err
 		}
 		accountsV.Title = strconv.Itoa(accountsStartX) + " - " + strconv.Itoa(accountsEndX) + " Accounts"
-		accountsV.Editable = true
+		//accountsV.Editable = true
 		accountsV.Wrap = true
 
+		accountsV.Highlight = true
+		accountsV.SelBgColor = gocui.ColorGreen
+		accountsV.SelFgColor = gocui.ColorBlack
+
+		for k, v := range Items {
+			fmt.Fprintln(accountsV, strconv.Itoa(k)+" - "+v)
+		}
+
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
+			return err
+		}
+
+		if err := gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, cursorDown); err != nil {
+			return err
+		}
+
+		if err := gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, cursorUp); err != nil {
 			return err
 		}
 	}
@@ -130,6 +169,8 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 	return gocui.ErrQuit
 }
 
+var Gui *gocui.Gui
+
 func main() {
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
@@ -143,6 +184,9 @@ func main() {
 
 	g.SetManagerFunc(layout)
 
+	if err := g.SetKeybinding("", gocui.KeyCtrlZ, gocui.ModNone, maximizePreview); err != nil {
+		log.Panicln(err)
+	}
 	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		log.Panicln(err)
 	}
@@ -153,4 +197,44 @@ func main() {
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
+}
+
+func cursorDown(g *gocui.Gui, v *gocui.View) error {
+	if v != nil {
+		cx, cy := v.Cursor()
+		showLog(g, "Cursor down: "+Items[cy])
+		if cy+1 == 5 {
+			return nil
+		}
+		if err := v.SetCursor(cx, cy+1); err != nil {
+			ox, oy := v.Origin()
+			if err := v.SetOrigin(ox, oy+1); err != nil {
+				return err
+			}
+		}
+
+	}
+	return nil
+}
+
+func cursorUp(g *gocui.Gui, v *gocui.View) error {
+	if v != nil {
+		ox, oy := v.Origin()
+		cx, cy := v.Cursor()
+		if err := v.SetCursor(cx, cy-1); err != nil && oy > 0 {
+			if err := v.SetOrigin(ox, oy-1); err != nil {
+				return err
+			}
+		}
+
+		showLog(g, "Cursor down: "+strconv.Itoa(cy))
+	}
+	return nil
+}
+
+func showLog(g *gocui.Gui, message string) {
+
+	logV, _ := g.View(EMAILS_VIEW)
+	logV.Clear()
+	fmt.Fprintln(logV, "Cursor up: "+message)
 }
