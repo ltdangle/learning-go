@@ -6,15 +6,17 @@ import (
 	"strconv"
 )
 
-// AccountsV email accounts view
-type AccountsV struct {
-	view *gocui.View
+// accountsV email accounts view
+type accountsV struct {
+	view    *gocui.View
+	emailsV *emailsV
 }
 
-func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) (*AccountsV, error) {
+func createAccountsView(gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
 
 	var err error
-	self := &AccountsV{}
+	self := &accountsV{}
+	self.emailsV = emailsV
 	if self.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return nil, err
@@ -44,7 +46,7 @@ func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) (*Accoun
 	return self, nil
 }
 
-func (self AccountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		selectedItem := cy + 1
@@ -61,14 +63,16 @@ func (self AccountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 		self.log(g, "Selected item: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
 		selectedText, _ := v.Line(selectedItem)
 		self.log(g, "Selected text: "+selectedText)
-		if err := populateEmailsView(g, selectedItem); err != nil {
+
+		// TODO: issue event instead
+		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (self AccountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()
@@ -84,7 +88,8 @@ func (self AccountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		if err := populateEmailsView(g, selectedItem); err != nil {
+		// TODO: issue event instead
+		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}
 
@@ -93,6 +98,6 @@ func (self AccountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func (self AccountsV) log(g *gocui.Gui, msg string) {
+func (self accountsV) log(g *gocui.Gui, msg string) {
 	showLog(g, msg)
 }

@@ -6,32 +6,39 @@ import (
 	"strconv"
 )
 
-func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
-	if emailsV, err := gui.SetView(EMAILS_VIEW, startX, startY, endX, endY); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-		emailsV.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Emails"
-
-		emailsV.Autoscroll = true
-		emailsV.Highlight = true
-		emailsV.SelBgColor = gocui.ColorGreen
-		emailsV.SelFgColor = gocui.ColorBlack
-
-		if err := populateEmailsView(gui, 0); err != nil {
-			return err
-		}
-		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowUp, gocui.ModNone, cursorUpEmails); err != nil {
-			return err
-		}
-		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowDown, gocui.ModNone, cursorDownEmails); err != nil {
-			return err
-		}
-	}
-	return nil
+// emailsV email accounts view
+type emailsV struct {
+	view *gocui.View
 }
 
-func populateEmailsView(g *gocui.Gui, emailAccountIndex int) error {
+func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) (*emailsV, error) {
+	var err error
+	self := &emailsV{}
+
+	if self.view, err = gui.SetView(EMAILS_VIEW, startX, startY, endX, endY); err != nil {
+		if err != gocui.ErrUnknownView {
+			return nil, err
+		}
+		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Emails"
+		self.view.Autoscroll = true
+		self.view.Highlight = true
+		self.view.SelBgColor = gocui.ColorGreen
+		self.view.SelFgColor = gocui.ColorBlack
+
+		if err := self.populateEmails(gui, 0); err != nil {
+			return nil, err
+		}
+		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUpEmails); err != nil {
+			return nil, err
+		}
+		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDownEmails); err != nil {
+			return nil, err
+		}
+	}
+	return self, nil
+}
+
+func (self *emailsV) populateEmails(g *gocui.Gui, emailAccountIndex int) error {
 	v, _ := g.View(EMAILS_VIEW)
 	v.Clear()
 	for _, email := range Emails[emailAccountIndex] {
@@ -41,7 +48,7 @@ func populateEmailsView(g *gocui.Gui, emailAccountIndex int) error {
 	return nil
 }
 
-func cursorDownEmails(g *gocui.Gui, v *gocui.View) error {
+func (self *emailsV) cursorDownEmails(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		showLog(g, "Cursor down: "+Accounts[cy])
@@ -59,7 +66,7 @@ func cursorDownEmails(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func cursorUpEmails(g *gocui.Gui, v *gocui.View) error {
+func (self *emailsV) cursorUpEmails(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()

@@ -37,12 +37,13 @@ func layout(gui *gocui.Gui) error {
 	previewEndY := mainViewEndY
 
 	var err error
-	//var accountsV *AccountsV
-	if _, err = createAccountsView(gui, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	//var accountsV *accountsV
+	var emailsV *emailsV
+	if emailsV, err = createEmailsView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
 
-	if err := createEmailsView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if _, err = createAccountsView(gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		return err
 	}
 
