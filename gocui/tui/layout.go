@@ -51,14 +51,6 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 	
-	//if previewV, err := gui.SetView(PREVIEW_VIEW, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
-	//	if err != gocui.ErrUnknownView {
-	//		return err
-	//	}
-	//	previewV.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
-	//	previewV.Editable = true
-	//	previewV.Autoscroll = true
-	//}
 	if bottomV, err := gui.SetView(BOTTOM_VIEW, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
