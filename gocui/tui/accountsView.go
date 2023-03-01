@@ -84,6 +84,7 @@ func cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 	}
 	return nil
 }
+
 func logAccountsView(g *gocui.Gui, msg string) {
 	showLog(g, msg)
 }
