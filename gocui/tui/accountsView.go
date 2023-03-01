@@ -41,8 +41,8 @@ func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
-		logAccountsView(g, "Selected: "+strconv.Itoa(cy)+" = "+Accounts[cy])
-		if cy+1 == 5 {
+		selectedItem := cy + 1
+		if selectedItem == 5 {
 			return nil
 		}
 		if err := v.SetCursor(cx, cy+1); err != nil {
@@ -52,6 +52,10 @@ func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
+		logAccountsView(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		if err := populateEmailsView(g, selectedItem); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -66,7 +70,17 @@ func cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		logAccountsView(g, "Selected: "+strconv.Itoa(cy)+" = "+Accounts[cy])
+		selectedItem := cy - 1
+		// check that selectedItem is not out of bounds
+		if selectedItem < 0 {
+			return nil
+		}
+
+		if err := populateEmailsView(g, selectedItem); err != nil {
+			return err
+		}
+
+		logAccountsView(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
 	}
 	return nil
 }

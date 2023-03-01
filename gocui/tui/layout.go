@@ -50,6 +50,7 @@ func layout(gui *gocui.Gui) error {
 		}
 		previewV.Title = strconv.Itoa(previewStartX) + " - " + strconv.Itoa(previewEndX) + " Preview"
 		previewV.Editable = true
+		previewV.Autoscroll = true
 	}
 	if bottomV, err := gui.SetView(BOTTOM_VIEW, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		if err != gocui.ErrUnknownView {

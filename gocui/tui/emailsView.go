@@ -3,7 +3,6 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
-	"log"
 	"strconv"
 )
 
@@ -19,11 +18,8 @@ func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 		emailsV.SelBgColor = gocui.ColorGreen
 		emailsV.SelFgColor = gocui.ColorBlack
 
-		//for _, email := range Emails[0] {
-		//	fmt.Fprintln(emailsV, email)
-		//}
-		if err := populateEmailsView(emailsV, 1); err != nil {
-			log.Panicln(err)
+		if err := populateEmailsView(gui, 0); err != nil {
+			return err
 		}
 		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowUp, gocui.ModNone, cursorUpEmails); err != nil {
 			return err
@@ -35,9 +31,11 @@ func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 	return nil
 }
 
-func populateEmailsView(emailsV *gocui.View, emailAccountIndex int) error {
+func populateEmailsView(g *gocui.Gui, emailAccountIndex int) error {
+	v, _ := g.View(EMAILS_VIEW)
+	v.Clear()
 	for _, email := range Emails[emailAccountIndex] {
-		fmt.Fprintln(emailsV, email)
+		fmt.Fprintln(v, email)
 	}
 
 	return nil
