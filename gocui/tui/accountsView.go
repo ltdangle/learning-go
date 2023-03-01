@@ -19,8 +19,8 @@ func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 		accountsV.SelBgColor = gocui.ColorGreen
 		accountsV.SelFgColor = gocui.ColorBlack
 
-		for k, v := range Accounts {
-			fmt.Fprintln(accountsV, strconv.Itoa(k)+" - "+v)
+		for _, v := range Accounts {
+			fmt.Fprintln(accountsV, v)
 		}
 
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
@@ -52,7 +52,9 @@ func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		logAccountsView(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		logAccountsView(g, "Selected item: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		selectedText, _ := v.Line(selectedItem)
+		logAccountsView(g, "Selected text: "+selectedText)
 		if err := populateEmailsView(g, selectedItem); err != nil {
 			return err
 		}
