@@ -36,7 +36,9 @@ func layout(gui *gocui.Gui) error {
 	previewEndX := mainViewEndX
 	previewEndY := mainViewEndY
 
-	if err := createAccountsView(gui, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	var err error
+	//var accountsV *AccountsV
+	if _, err = createAccountsView(gui, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		return err
 	}
 

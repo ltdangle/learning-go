@@ -6,39 +6,45 @@ import (
 	"strconv"
 )
 
-func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) error {
+// AccountsV email accounts view
+type AccountsV struct {
+	view *gocui.View
+}
 
-	if accountsV, err := gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
+func createAccountsView(gui *gocui.Gui, startX, startY, endX, endY int) (*AccountsV, error) {
+
+	var err error
+	self := &AccountsV{}
+	if self.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
-			return err
+			return nil, err
 		}
-		accountsV.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
-
-		accountsV.Autoscroll = true
-		accountsV.Highlight = true
-		accountsV.SelBgColor = gocui.ColorGreen
-		accountsV.SelFgColor = gocui.ColorBlack
+		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
+		self.view.Autoscroll = true
+		self.view.Highlight = true
+		self.view.SelBgColor = gocui.ColorGreen
+		self.view.SelFgColor = gocui.ColorBlack
 
 		for _, v := range Accounts {
-			fmt.Fprintln(accountsV, v)
+			fmt.Fprintln(self.view, v)
 		}
 
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
-			return err
+			return nil, err
 		}
 
-		if err := gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, cursorDownAccounts); err != nil {
-			return err
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDownAccounts); err != nil {
+			return nil, err
 		}
 
-		if err := gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, cursorUpAccounts); err != nil {
-			return err
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUpAccounts); err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return self, nil
 }
 
-func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self AccountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		selectedItem := cy + 1
@@ -52,9 +58,9 @@ func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		logAccountsView(g, "Selected item: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		self.log(g, "Selected item: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
 		selectedText, _ := v.Line(selectedItem)
-		logAccountsView(g, "Selected text: "+selectedText)
+		self.log(g, "Selected text: "+selectedText)
 		if err := populateEmailsView(g, selectedItem); err != nil {
 			return err
 		}
@@ -62,7 +68,7 @@ func cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self AccountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()
@@ -82,11 +88,11 @@ func cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 			return err
 		}
 
-		logAccountsView(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		self.log(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
 	}
 	return nil
 }
 
-func logAccountsView(g *gocui.Gui, msg string) {
+func (self AccountsV) log(g *gocui.Gui, msg string) {
 	showLog(g, msg)
 }
