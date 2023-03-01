@@ -47,7 +47,10 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 
-	_ = createPreviewView(gui, previewStartX, previewStartY, previewEndX, previewEndY)
+	if _, err = createPreviewView(gui, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
+		return err
+	}
+	
 	//if previewV, err := gui.SetView(PREVIEW_VIEW, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 	//	if err != gocui.ErrUnknownView {
 	//		return err
