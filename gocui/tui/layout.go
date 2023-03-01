@@ -2,7 +2,6 @@ package tui
 
 import (
 	"github.com/jroimartin/gocui"
-	"strconv"
 )
 
 func layout(gui *gocui.Gui) error {
@@ -50,13 +49,9 @@ func layout(gui *gocui.Gui) error {
 	if _, err = createPreviewView(gui, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 		return err
 	}
-	
-	if bottomV, err := gui.SetView(BOTTOM_VIEW, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-		bottomV.Title = strconv.Itoa(bottomStartX) + " - " + strconv.Itoa(bottomEndX) + " Log"
-		bottomV.Editable = true
+
+	if _, err = createBottomView(gui, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
+		return err
 	}
 
 	return nil
