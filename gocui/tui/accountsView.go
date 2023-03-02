@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
 	"strconv"
 )
@@ -65,6 +66,7 @@ func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 		self.log(g, "Selected text: "+selectedText)
 
 		// TODO: issue event instead
+		event.MustFire("evt1", event.M{"arg0": "val0", "arg1": "val1"})
 		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}
@@ -89,6 +91,7 @@ func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 		}
 
 		// TODO: issue event instead
+		event.MustFire("evt1", event.M{"arg0": "val0", "arg1": "val1"})
 		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}

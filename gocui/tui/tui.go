@@ -5,6 +5,7 @@ package tui
 
 import (
 	"fmt"
+	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
 	"log"
 )
@@ -65,6 +66,13 @@ func Tui() {
 	if err := g.SetKeybinding("", gocui.KeyTab, gocui.ModNone, goToNextView); err != nil {
 		log.Panicln(err)
 	}
+
+	// Register event listener
+	event.On("evt1", event.ListenerFunc(func(e event.Event) error {
+		showLog(g, "handle event: "+e.Name())
+		fmt.Printf("handle event: %s\n", e.Name())
+		return nil
+	}), event.Normal)
 
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
