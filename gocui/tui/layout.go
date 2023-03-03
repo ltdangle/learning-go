@@ -1,7 +1,9 @@
 package tui
 
 import (
+	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
+	"strconv"
 )
 
 func layout(gui *gocui.Gui) error {
@@ -56,9 +58,12 @@ func layout(gui *gocui.Gui) error {
 	}
 
 	// Register event listener
-	eventManager.On(UPDATE_EMAILS_VIEW, func() {
-		showLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW)
-	})
+	event.On(UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
+		selectedItem := e.Data()["selectedItem"].(int)
+		showLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
+		_ = emailsV.populateEmails(gui, selectedItem)
+		return nil
+	}), event.Normal)
 
 	return nil
 }

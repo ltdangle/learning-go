@@ -7,7 +7,6 @@ import (
 
 type IEvent interface {
 	Fire(name string, params map[string]any)
-	On(name string, callback func())
 }
 
 const (
@@ -25,10 +24,4 @@ func createTuiEventManager(gui *gocui.Gui) *eventManager {
 
 func (self *eventManager) Fire(name string, params map[string]any) {
 	event.MustFire(name, params)
-}
-func (self *eventManager) On(name string, callback func()) {
-	event.On(name, event.ListenerFunc(func(e event.Event) error {
-		callback()
-		return nil
-	}), event.Normal)
 }

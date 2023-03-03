@@ -20,6 +20,7 @@ func createPreviewView(gui *gocui.Gui, startX, startY, endX, endY int) (*preview
 		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Preview"
 		self.view.Editable = true
 		self.view.Autoscroll = true
+		self.view.Wrap = true
 	}
 	return self, nil
 }

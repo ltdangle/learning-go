@@ -66,11 +66,7 @@ func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 		selectedText, _ := v.Line(selectedItem)
 		self.log(g, "Selected text: "+selectedText)
 
-		// TODO: issue event instead
-		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"arg0": "val0", "arg1": "val1"})
-		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
-			return err
-		}
+		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
@@ -91,13 +87,7 @@ func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		// TODO: issue event instead
-		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"arg0": "val0", "arg1": "val1"})
-		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
-			return err
-		}
-
-		self.log(g, "Selected: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }

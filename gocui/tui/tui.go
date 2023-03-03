@@ -74,6 +74,6 @@ func Tui() {
 func showLog(g *gocui.Gui, message string) {
 
 	logV, _ := g.View(PREVIEW_VIEW)
-	//logV.Clear()
+	logV.Clear()
 	fmt.Fprintln(logV, message)
 }
