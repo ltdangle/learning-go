@@ -13,15 +13,6 @@ type EmailAccount struct {
 	TrashFolder string
 	// Email delivery dsn
 	DeliveryTransport string
-}
-
-func (ea *EmailAccount) ToArray() map[string]interface{} {
-	arr := make(map[string]interface{})
-	arr["accountType"] = ea.AccountType
-	arr["shortName"] = ea.ShortName
-	arr["email"] = ea.Email
-	arr["inboxShellCommand"] = ea.InboxShellCommand
-	arr["trashFolder"] = ea.TrashFolder
-	arr["dsn"] = ea.DeliveryTransport
-	return arr
+	// Email collection
+	Emails []Email
 }
