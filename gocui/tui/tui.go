@@ -68,9 +68,8 @@ func Tui() {
 	}
 
 	// Register event listener
-	event.On("evt1", event.ListenerFunc(func(e event.Event) error {
+	event.On(UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
 		showLog(g, "handle event: "+e.Name())
-		fmt.Printf("handle event: %s\n", e.Name())
 		return nil
 	}), event.Normal)
 

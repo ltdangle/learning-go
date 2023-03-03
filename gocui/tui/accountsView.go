@@ -2,7 +2,6 @@ package tui
 
 import (
 	"fmt"
-	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
 	"strconv"
 )
@@ -11,13 +10,15 @@ import (
 type accountsV struct {
 	view    *gocui.View
 	emailsV *emailsV
+	event   IEvent
 }
 
-func createAccountsView(gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
+func createAccountsView(event IEvent, gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
 
 	var err error
 	self := &accountsV{}
 	self.emailsV = emailsV
+	self.event = event
 	if self.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return nil, err
@@ -66,7 +67,7 @@ func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 		self.log(g, "Selected text: "+selectedText)
 
 		// TODO: issue event instead
-		event.MustFire("evt1", event.M{"arg0": "val0", "arg1": "val1"})
+		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"arg0": "val0", "arg1": "val1"})
 		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}
@@ -91,7 +92,7 @@ func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 		}
 
 		// TODO: issue event instead
-		event.MustFire("evt1", event.M{"arg0": "val0", "arg1": "val1"})
+		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"arg0": "val0", "arg1": "val1"})
 		if err := self.emailsV.populateEmails(g, selectedItem); err != nil {
 			return err
 		}

@@ -41,8 +41,8 @@ func layout(gui *gocui.Gui) error {
 	if emailsV, err = createEmailsView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
-
-	if _, err = createAccountsView(gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	tuiVent := createTuiEventManager()
+	if _, err = createAccountsView(tuiVent, gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		return err
 	}
 
