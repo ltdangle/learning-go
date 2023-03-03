@@ -21,15 +21,13 @@ var (
 	viewArr  = []string{ACCOUNTS_VIEW, EMAILS_VIEW, PREVIEW_VIEW, BOTTOM_VIEW}
 	active   = 0
 	Accounts = []string{"one", "two", "three", "four", "five"}
-	//Emails   = []string{"email1@domain1.com", "email2@domain2.com", "email3@domain3.com", "email4@domain4.com", "email5@domain5.com"}
-
-	//Emails = [][]string{
-	//{"email1@one.com", "email2@one.com", "email3@one.com", "email4@one.com", "email5@one.com"},
-	//{"email1@two.com", "email2@two.com", "email3@two.com", "email4@two.com", "email5@two.com"},
-	//{"email1@three.com", "email2@three.com", "email3@three.com", "email4@three.com", "email5@three.com"},
-	//{"email1@four.com", "email2@four.com", "email3@four.com", "email4@four.com", "email5@four.com"},
-	//{"email1@five.com", "email2@five.com", "email3@five.com", "email4@five.com", "email5@five.com"},
-	//}
+	Emails   = [][]string{
+		{"email1@one.com", "email2@one.com", "email3@one.com", "email4@one.com", "email5@one.com"},
+		{"email1@two.com", "email2@two.com", "email3@two.com", "email4@two.com", "email5@two.com"},
+		{"email1@three.com", "email2@three.com", "email3@three.com", "email4@three.com", "email5@three.com"},
+		{"email1@four.com", "email2@four.com", "email3@four.com", "email4@four.com", "email5@four.com"},
+		{"email1@five.com", "email2@five.com", "email3@five.com", "email4@five.com", "email5@five.com"},
+	}
 )
 
 func setCurrentViewOnTop(g *gocui.Gui, name string) (*gocui.View, error) {
