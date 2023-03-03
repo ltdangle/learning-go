@@ -35,14 +35,15 @@ func layout(gui *gocui.Gui) error {
 	previewEndX := mainViewEndX
 	previewEndY := mainViewEndY
 
+	eventManager := createTuiEventManager(gui)
+
 	var err error
-	//var accountsV *accountsV
 	var emailsV *emailsV
+
 	if emailsV, err = createEmailsView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
-	tuiVent := createTuiEventManager()
-	if _, err = createAccountsView(tuiVent, gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	if _, err = createAccountsView(eventManager, gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		return err
 	}
 
@@ -53,6 +54,11 @@ func layout(gui *gocui.Gui) error {
 	if _, err = createBottomView(gui, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		return err
 	}
+
+	// Register event listener
+	eventManager.On(UPDATE_EMAILS_VIEW, func() {
+		showLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW)
+	})
 
 	return nil
 }

@@ -22,7 +22,7 @@ func maximizePreview(g *gocui.Gui, v *gocui.View) error {
 	fmt.Fprintln(bottomV, err)
 
 	_, err = setCurrentViewOnTop(g, "MAXIMIZE_PREVIEW")
-	//_, err = g.SetViewOnTop("MAXIMIZE_PREVIEW")
-	//setCurrentViewOnTop(g, PREVIEW_VIEW)
+	//_, err = gui.SetViewOnTop("MAXIMIZE_PREVIEW")
+	//setCurrentViewOnTop(gui, PREVIEW_VIEW)
 	return err
 }
