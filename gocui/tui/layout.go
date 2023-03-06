@@ -42,7 +42,7 @@ func layout(gui *gocui.Gui) error {
 
 	var err error
 	var emailsV *emailsV
-	accountRepository := repository.NewSeedAccountRepository(SeedData())
+	accountRepository := repository.NewSeedAccountRepository(repository.SeedData())
 
 	if emailsV, err = createEmailsView(gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err

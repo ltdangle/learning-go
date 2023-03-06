@@ -1,11 +1,12 @@
 package main
 
 import (
+	"learngocui/repository"
 	"learngocui/tui"
 )
 
 func main() {
 	// Add some emails to the slice
-	emailAccounts := tui.SeedData()
+	emailAccounts := repository.SeedData()
 	tui.Tui(emailAccounts)
 }

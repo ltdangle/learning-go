@@ -2,13 +2,12 @@ package repository
 
 import (
 	"learngocui/model"
-	"learngocui/tui"
 	"reflect"
 	"testing"
 )
 
 func TestSeedAccountRepository_FindById(t *testing.T) {
-	seed := tui.SeedData()
+	seed := SeedData()
 	tests := []struct {
 		name   string
 		fields []model.EmailAccount

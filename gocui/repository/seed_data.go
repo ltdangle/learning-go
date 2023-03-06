@@ -1,4 +1,4 @@
-package tui
+package repository
 
 import "learngocui/model"
 
