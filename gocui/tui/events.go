@@ -10,7 +10,8 @@ type IEvent interface {
 }
 
 const (
-	UPDATE_EMAILS_VIEW = "update_emails_view"
+	UPDATE_EMAILS_VIEW   = "update_emails_view"
+	UPDATE_EMAIL_PREVIEW = "update_emails_view"
 )
 
 type eventManager struct {

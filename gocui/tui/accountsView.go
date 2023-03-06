@@ -37,18 +37,18 @@ func createAccountsView(event IEvent, gui *gocui.Gui, emailsV *emailsV, startX, 
 			return nil, err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDownAccounts); err != nil {
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDown); err != nil {
 			return nil, err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUpAccounts); err != nil {
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUp); err != nil {
 			return nil, err
 		}
 	}
 	return self, nil
 }
 
-func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		selectedItem := cy + 1
@@ -71,7 +71,7 @@ func (self accountsV) cursorDownAccounts(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
+func (self accountsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()
@@ -93,5 +93,5 @@ func (self accountsV) cursorUpAccounts(g *gocui.Gui, v *gocui.View) error {
 }
 
 func (self accountsV) log(g *gocui.Gui, msg string) {
-	showLog(g, msg)
+	tuiLog(g, msg)
 }

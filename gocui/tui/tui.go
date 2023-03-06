@@ -72,9 +72,9 @@ func Tui(emails []model.EmailAccount) {
 	}
 }
 
-func showLog(g *gocui.Gui, message string) {
+func tuiLog(g *gocui.Gui, message string) {
 
-	logV, _ := g.View(PREVIEW_VIEW)
+	logV, _ := g.View(BOTTOM_VIEW)
 	logV.Clear()
 	fmt.Fprintln(logV, message)
 }

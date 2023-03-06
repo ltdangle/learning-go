@@ -16,7 +16,7 @@ func createBottomView(gui *gocui.Gui, startX, startY, endX, endY int) (*bottomV,
 		if err != gocui.ErrUnknownView {
 			return nil, err
 		}
-		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Log"
+		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " tuiLog"
 		self.view.Editable = true
 	}
 	return self, nil

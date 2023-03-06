@@ -44,7 +44,7 @@ func layout(gui *gocui.Gui) error {
 	var emailsV *emailsV
 	accountRepository := repository.NewSeedAccountRepository(repository.SeedData())
 
-	if emailsV, err = createEmailsView(gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if emailsV, err = createEmailsView(eventManager, gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
 	if _, err = createAccountsView(eventManager, gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
@@ -59,11 +59,17 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 
-	// Register event listener
+	// Register event listeners
 	event.On(UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		showLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
 		_ = emailsV.populateEmails(gui, selectedItem)
+		return nil
+	}), event.Normal)
+
+	event.On(UPDATE_EMAIL_PREVIEW, event.ListenerFunc(func(e event.Event) error {
+		selectedItem := e.Data()["selectedItem"].(int)
+		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAIL_PREVIEW+", selectedItem: "+strconv.Itoa(selectedItem))
 		return nil
 	}), event.Normal)
 
