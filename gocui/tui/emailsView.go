@@ -3,17 +3,20 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
+	"learngocui/repository"
 	"strconv"
 )
 
 // emailsV email accounts view
 type emailsV struct {
-	view *gocui.View
+	view         *gocui.View
+	accountsRepo repository.IAccountRepository
 }
 
-func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) (*emailsV, error) {
+func createEmailsView(gui *gocui.Gui, accountsRepo repository.IAccountRepository, startX, startY, endX, endY int) (*emailsV, error) {
 	var err error
 	self := &emailsV{}
+	self.accountsRepo = accountsRepo
 
 	if self.view, err = gui.SetView(EMAILS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
@@ -41,7 +44,9 @@ func createEmailsView(gui *gocui.Gui, startX, startY, endX, endY int) (*emailsV,
 func (self *emailsV) populateEmails(g *gocui.Gui, emailAccountIndex int) error {
 	v, _ := g.View(EMAILS_VIEW)
 	v.Clear()
-	for _, email := range Emails[emailAccountIndex] {
+	//r := self.accountsRepo.FindById(emailAccountIndex)
+	//fmt.Fprintln(v, r)
+	for _, email := range self.accountsRepo.FindById(emailAccountIndex).Emails {
 		fmt.Fprintln(v, email)
 	}
 

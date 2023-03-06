@@ -3,6 +3,7 @@ package tui
 import (
 	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
+	"learngocui/repository"
 	"strconv"
 )
 
@@ -41,8 +42,9 @@ func layout(gui *gocui.Gui) error {
 
 	var err error
 	var emailsV *emailsV
+	accountRepository := repository.NewSeedAccountRepository(SeedData())
 
-	if emailsV, err = createEmailsView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if emailsV, err = createEmailsView(gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
 	if _, err = createAccountsView(eventManager, gui, emailsV, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
