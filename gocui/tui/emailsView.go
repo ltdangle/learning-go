@@ -30,7 +30,7 @@ func createEmailsView(event IEvent, gui *gocui.Gui, accountsRepo repository.IAcc
 		self.view.SelBgColor = gocui.ColorGreen
 		self.view.SelFgColor = gocui.ColorBlack
 
-		if err := self.populateEmails(gui, 0); err != nil {
+		if err := self.populate(gui, 0); err != nil {
 			return nil, err
 		}
 		if err := gui.SetKeybinding(EMAILS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUp); err != nil {
@@ -43,7 +43,7 @@ func createEmailsView(event IEvent, gui *gocui.Gui, accountsRepo repository.IAcc
 	return self, nil
 }
 
-func (self *emailsV) populateEmails(g *gocui.Gui, emailAccountIndex int) error {
+func (self *emailsV) populate(g *gocui.Gui, emailAccountIndex int) error {
 	v, _ := g.View(EMAILS_VIEW)
 	v.Clear()
 	for _, email := range self.accountsRepo.FindById(emailAccountIndex).Emails {

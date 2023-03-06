@@ -42,6 +42,7 @@ func layout(gui *gocui.Gui) error {
 
 	var err error
 	var emailsV *emailsV
+	var previewV *previewV
 	accountRepository := repository.NewSeedAccountRepository(repository.SeedData())
 
 	if emailsV, err = createEmailsView(eventManager, gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
@@ -51,7 +52,7 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 
-	if _, err = createPreviewView(gui, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
+	if previewV, err = createPreviewView(gui, accountRepository, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 		return err
 	}
 
@@ -63,13 +64,14 @@ func layout(gui *gocui.Gui) error {
 	event.On(UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
 		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
-		_ = emailsV.populateEmails(gui, selectedItem)
+		_ = emailsV.populate(gui, selectedItem)
 		return nil
 	}), event.Normal)
 
 	event.On(UPDATE_EMAIL_PREVIEW, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
 		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAIL_PREVIEW+", selectedItem: "+strconv.Itoa(selectedItem))
+		_ = previewV.populate(gui, selectedItem)
 		return nil
 	}), event.Normal)
 
