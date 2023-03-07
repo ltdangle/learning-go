@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"fmt"
 	"github.com/jroimartin/gocui"
 	"learngocui/events"
 	"strconv"
@@ -30,10 +29,6 @@ func createAccountsView(event events.IEvent, gui *gocui.Gui, emailsV *emailsV, s
 		self.view.SelBgColor = gocui.ColorGreen
 		self.view.SelFgColor = gocui.ColorBlack
 
-		for _, v := range Accounts {
-			fmt.Fprintln(self.view, v)
-		}
-
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
 			return nil, err
 		}
@@ -53,6 +48,8 @@ func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		selectedItem := cy + 1
+
+		// TODO: 5?
 		if selectedItem == 5 {
 			return nil
 		}
@@ -63,7 +60,7 @@ func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		self.log(g, "Selected item: "+strconv.Itoa(selectedItem)+" = "+Accounts[selectedItem])
+		self.log(g, "Selected item: "+strconv.Itoa(selectedItem))
 		selectedText, _ := v.Line(selectedItem)
 		self.log(g, "Selected text: "+selectedText)
 
