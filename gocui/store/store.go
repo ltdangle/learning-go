@@ -41,11 +41,12 @@ func (self *Store) selectAccount(shortName string) *model.EmailAccount {
 	return nil
 }
 
-func (self *Store) selectEmail(id int) *model.Email {
-	for _, email := range self.selectedAccount.Emails {
-		if email.Id == id {
-			return &email
-		}
+func (self *Store) selectEmail(index int) *model.Email {
+	if index >= len(self.selectedAccount.Emails) {
+		return nil
 	}
-	return nil
+
+	self.selectedEmail = &self.selectedAccount.Emails[index]
+	return self.selectedEmail
+
 }
