@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
+	"learngocui/events"
 	"learngocui/repository"
 	"strconv"
 )
@@ -11,10 +12,10 @@ import (
 type emailsV struct {
 	view         *gocui.View
 	accountsRepo repository.IAccountRepository
-	event        IEvent
+	event        events.IEvent
 }
 
-func createEmailsView(event IEvent, gui *gocui.Gui, accountsRepo repository.IAccountRepository, startX, startY, endX, endY int) (*emailsV, error) {
+func createEmailsView(event events.IEvent, gui *gocui.Gui, accountsRepo repository.IAccountRepository, startX, startY, endX, endY int) (*emailsV, error) {
 	var err error
 	self := &emailsV{}
 	self.event = event
@@ -71,7 +72,7 @@ func (self *emailsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 		tuiLog(g, "Cursor down: "+Accounts[cy])
-		self.event.Fire(UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(events.UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
@@ -94,7 +95,7 @@ func (self *emailsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
 		}
 
 		tuiLog(g, "Cursor up: "+strconv.Itoa(cy))
-		self.event.Fire(UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(events.UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }

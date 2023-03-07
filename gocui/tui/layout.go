@@ -3,7 +3,9 @@ package tui
 import (
 	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
+	"learngocui/events"
 	"learngocui/repository"
+	"learngocui/store"
 	"strconv"
 )
 
@@ -38,12 +40,16 @@ func layout(gui *gocui.Gui) error {
 	previewEndX := mainViewEndX
 	previewEndY := mainViewEndY
 
-	eventManager := createTuiEventManager(gui)
+	eventManager := events.CreateTuiEventManager(gui)
 
 	var err error
 	var emailsV *emailsV
 	var previewV *previewV
 	accountRepository := repository.NewSeedAccountRepository(repository.SeedData())
+
+	s := store.NewStore(eventManager)
+	seed := repository.SeedData()
+	s.SetAccounts(seed)
 
 	if emailsV, err = createEmailsView(eventManager, gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
@@ -61,16 +67,16 @@ func layout(gui *gocui.Gui) error {
 	}
 
 	// Register event listeners
-	event.On(UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
+	event.On(events.UPDATE_EMAILS_VIEW, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog(gui, "handle event from eventManager: "+events.UPDATE_EMAILS_VIEW+", selectedItem: "+strconv.Itoa(selectedItem))
 		_ = emailsV.populate(gui, selectedItem)
 		return nil
 	}), event.Normal)
 
-	event.On(UPDATE_EMAIL_PREVIEW, event.ListenerFunc(func(e event.Event) error {
+	event.On(events.UPDATE_EMAIL_PREVIEW, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(gui, "handle event from eventManager: "+UPDATE_EMAIL_PREVIEW+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog(gui, "handle event from eventManager: "+events.UPDATE_EMAIL_PREVIEW+", selectedItem: "+strconv.Itoa(selectedItem))
 		_ = previewV.populate(gui, selectedItem)
 		return nil
 	}), event.Normal)

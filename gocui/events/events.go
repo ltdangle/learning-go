@@ -1,4 +1,4 @@
-package tui
+package events
 
 import (
 	"github.com/gookit/event"
@@ -19,7 +19,7 @@ type eventManager struct {
 }
 
 // constructor
-func createTuiEventManager(gui *gocui.Gui) *eventManager {
+func CreateTuiEventManager(gui *gocui.Gui) *eventManager {
 	return &eventManager{gui}
 }
 

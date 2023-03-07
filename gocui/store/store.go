@@ -1,8 +1,8 @@
 package store
 
 import (
+	"learngocui/events"
 	"learngocui/model"
-	"learngocui/tui"
 )
 
 const (
@@ -14,10 +14,10 @@ type Store struct {
 	accounts        []model.EmailAccount
 	selectedAccount *model.EmailAccount
 	selectedEmail   *model.Email
-	events          tui.IEvent
+	events          events.IEvent
 }
 
-func NewStore(events tui.IEvent) *Store {
+func NewStore(events events.IEvent) *Store {
 	return &Store{events: events}
 }
 

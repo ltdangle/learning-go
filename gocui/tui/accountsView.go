@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
+	"learngocui/events"
 	"strconv"
 )
 
@@ -10,10 +11,10 @@ import (
 type accountsV struct {
 	view    *gocui.View
 	emailsV *emailsV
-	event   IEvent
+	event   events.IEvent
 }
 
-func createAccountsView(event IEvent, gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
+func createAccountsView(event events.IEvent, gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
 
 	var err error
 	self := &accountsV{}
@@ -66,7 +67,7 @@ func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 		selectedText, _ := v.Line(selectedItem)
 		self.log(g, "Selected text: "+selectedText)
 
-		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(events.UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
@@ -87,7 +88,7 @@ func (self accountsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		self.event.Fire(UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(events.UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
