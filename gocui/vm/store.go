@@ -21,26 +21,26 @@ func NewStore(events tui.IEvent) *Store {
 	return &Store{events: events}
 }
 
-func (self *Store) setAccounts(accounts []model.EmailAccount) {
+func (self *Store) SetAccounts(accounts []model.EmailAccount) {
 	self.accounts = accounts
 	// set default values
 	self.selectedAccount = &accounts[0]
 	self.selectedEmail = &self.selectedAccount.Emails[0]
 }
 
-func (self *Store) addAccount(account model.EmailAccount) {
+func (self *Store) AddAccount(account model.EmailAccount) {
 	self.accounts = append(self.accounts, account)
 }
 
-func (self *Store) getSelectedtAccount() *model.EmailAccount {
+func (self *Store) GetSelectedtAccount() *model.EmailAccount {
 	return self.selectedAccount
 }
 
-func (self *Store) getSelectedEmail() *model.Email {
+func (self *Store) GetSelectedEmail() *model.Email {
 	return self.selectedEmail
 }
 
-func (self *Store) selectAccount(shortName string) *model.EmailAccount {
+func (self *Store) SelectAccount(shortName string) *model.EmailAccount {
 	for _, acc := range self.accounts {
 		if acc.ShortName == shortName {
 			self.selectedAccount = &acc
@@ -51,7 +51,7 @@ func (self *Store) selectAccount(shortName string) *model.EmailAccount {
 	return nil
 }
 
-func (self *Store) selectEmail(index int) *model.Email {
+func (self *Store) SelectEmail(index int) *model.Email {
 	if index >= len(self.selectedAccount.Emails) {
 		return nil
 	}

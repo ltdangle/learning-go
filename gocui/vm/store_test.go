@@ -16,7 +16,7 @@ func setup() (*Store, []model.EmailAccount) {
 	events := &MockEvents{}
 	store := NewStore(events)
 	seed := repository.SeedData()
-	store.setAccounts(seed)
+	store.SetAccounts(seed)
 	return store, seed
 }
 
@@ -29,14 +29,14 @@ func TestInitialValues(t *testing.T) {
 // test selecting arbitrary account
 func TestSelectAccount(t *testing.T) {
 	store, seed := setup()
-	AssertEqual(t, store.selectAccount(seed[3].ShortName), store.selectedAccount)
+	AssertEqual(t, store.SelectAccount(seed[3].ShortName), store.selectedAccount)
 }
 
 func TestSelectEmail(t *testing.T) {
 	store, seed := setup()
 
-	store.selectAccount(seed[3].ShortName)
-	store.selectEmail(3)
+	store.SelectAccount(seed[3].ShortName)
+	store.SelectEmail(3)
 
 	AssertEqual(t, store.selectedEmail, &seed[3].Emails[3])
 }
