@@ -71,7 +71,7 @@ func (self *emailsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 				return err
 			}
 		}
-		tuiLog(g, "Cursor down: "+Accounts[cy])
+		tuiLog(g, "Cursor down: "+strconv.Itoa(cy))
 		self.event.Fire(events.UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
