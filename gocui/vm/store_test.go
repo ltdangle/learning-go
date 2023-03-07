@@ -14,7 +14,7 @@ func (self *MockEvents) Fire(name string, params map[string]any) {
 
 func setup() (*Store, []model.EmailAccount) {
 	events := &MockEvents{}
-	store := newStore(events)
+	store := NewStore(events)
 	seed := repository.SeedData()
 	store.setAccounts(seed)
 	return store, seed

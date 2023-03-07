@@ -17,7 +17,7 @@ type Store struct {
 	events          tui.IEvent
 }
 
-func newStore(events tui.IEvent) *Store {
+func NewStore(events tui.IEvent) *Store {
 	return &Store{events: events}
 }
 
