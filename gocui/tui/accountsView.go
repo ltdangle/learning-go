@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"fmt"
 	"github.com/jroimartin/gocui"
 	"learngocui/events"
 	"strconv"
@@ -8,6 +9,8 @@ import (
 
 // accountsV email accounts view
 type accountsV struct {
+	// items to be displayed
+	items   []string
 	view    *gocui.View
 	emailsV *emailsV
 	event   events.IEvent
@@ -42,6 +45,13 @@ func createAccountsView(event events.IEvent, gui *gocui.Gui, emailsV *emailsV, s
 		}
 	}
 	return self, nil
+}
+
+func (self *accountsV) populate(items []string) {
+	self.items = items
+	for _, item := range items {
+		fmt.Fprintln(self.view, item)
+	}
 }
 
 func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
