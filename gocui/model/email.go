@@ -1,6 +1,7 @@
 package model
 
 type Email struct {
+	Id int
 	// Email's path on the filesystem
 	Path        string
 	From        string

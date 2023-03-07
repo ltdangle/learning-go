@@ -1,10 +1,14 @@
 package repository
 
-import "learngocui/model"
+import (
+	"learngocui/model"
+	"math/rand"
+)
 
 func SeedData() []model.EmailAccount {
 	emails1 := []model.Email{
 		{
+			Id:          rand.Intn(100),
 			Path:        "/1/email1",
 			From:        "john@example.com",
 			To:          "jane@example.com",
@@ -19,6 +23,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/1/email2",
 			From:        "jane@example.com",
 			To:          "john@example.com",
@@ -33,6 +38,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/1/email3",
 			From:        "bob@example.com",
 			To:          "john@example.com",
@@ -47,6 +53,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/1/email4",
 			From:        "alice@example.com",
 			To:          "john@example.com",
@@ -61,6 +68,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/1/email5",
 			From:        "sales@example.com",
 			To:          "john@example.com",
@@ -77,6 +85,7 @@ func SeedData() []model.EmailAccount {
 	}
 	emails2 := []model.Email{
 		{
+			Id:          rand.Intn(100),
 			Path:        "/2/email1",
 			From:        "john@example.com",
 			To:          "jane@example.com",
@@ -91,6 +100,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/2/email2",
 			From:        "jane@example.com",
 			To:          "john@example.com",
@@ -105,6 +115,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/2/email3",
 			From:        "bob@example.com",
 			To:          "john@example.com",
@@ -119,6 +130,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/2/email4",
 			From:        "alice@example.com",
 			To:          "john@example.com",
@@ -133,6 +145,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/2/email5",
 			From:        "sales@example.com",
 			To:          "john@example.com",
@@ -149,6 +162,7 @@ func SeedData() []model.EmailAccount {
 	}
 	emails3 := []model.Email{
 		{
+			Id:          rand.Intn(100),
 			Path:        "/3/email1",
 			From:        "john@example.com",
 			To:          "jane@example.com",
@@ -163,6 +177,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/3/email2",
 			From:        "jane@example.com",
 			To:          "john@example.com",
@@ -177,6 +192,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/3/email3",
 			From:        "bob@example.com",
 			To:          "john@example.com",
@@ -191,6 +207,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/3/email4",
 			From:        "alice@example.com",
 			To:          "john@example.com",
@@ -205,6 +222,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/3/email5",
 			From:        "sales@example.com",
 			To:          "john@example.com",
@@ -221,6 +239,7 @@ func SeedData() []model.EmailAccount {
 	}
 	emails4 := []model.Email{
 		{
+			Id:          rand.Intn(100),
 			Path:        "/4/email1",
 			From:        "john@example.com",
 			To:          "jane@example.com",
@@ -235,6 +254,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/4/email2",
 			From:        "jane@example.com",
 			To:          "john@example.com",
@@ -249,6 +269,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/4/email3",
 			From:        "bob@example.com",
 			To:          "john@example.com",
@@ -263,6 +284,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/4/email4",
 			From:        "alice@example.com",
 			To:          "john@example.com",
@@ -277,6 +299,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/4/email5",
 			From:        "sales@example.com",
 			To:          "john@example.com",
@@ -293,6 +316,7 @@ func SeedData() []model.EmailAccount {
 	}
 	emails5 := []model.Email{
 		{
+			Id:          rand.Intn(100),
 			Path:        "/5/email1",
 			From:        "john@example.com",
 			To:          "jane@example.com",
@@ -307,6 +331,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/5/email2",
 			From:        "jane@example.com",
 			To:          "john@example.com",
@@ -321,6 +346,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/5/email3",
 			From:        "bob@example.com",
 			To:          "john@example.com",
@@ -335,6 +361,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/5/email4",
 			From:        "alice@example.com",
 			To:          "john@example.com",
@@ -349,6 +376,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 		{
+			Id:          rand.Intn(100),
 			Path:        "/5/email5",
 			From:        "sales@example.com",
 			To:          "john@example.com",
