@@ -6,8 +6,15 @@ import (
 	"testing"
 )
 
+// mocks
+type MockEvents struct{}
+
+func (self *MockEvents) Fire(name string, params map[string]any) {
+}
+
 func setup() (*Store, []model.EmailAccount) {
-	store := newStore()
+	events := &MockEvents{}
+	store := newStore(events)
 	seed := repository.SeedData()
 	store.setAccounts(seed)
 	return store, seed

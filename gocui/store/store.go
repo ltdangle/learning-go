@@ -1,15 +1,24 @@
 package store
 
-import "learngocui/model"
+import (
+	"learngocui/model"
+	"learngocui/tui"
+)
+
+const (
+	ACCOUNT_SELECTED = "account selected"
+	EMAIL_SELECTED   = "email selected"
+)
 
 type Store struct {
 	accounts        []model.EmailAccount
 	selectedAccount *model.EmailAccount
 	selectedEmail   *model.Email
+	events          tui.IEvent
 }
 
-func newStore() *Store {
-	return &Store{}
+func newStore(events tui.IEvent) *Store {
+	return &Store{events: events}
 }
 
 func (self *Store) setAccounts(accounts []model.EmailAccount) {
@@ -35,6 +44,7 @@ func (self *Store) selectAccount(shortName string) *model.EmailAccount {
 	for _, acc := range self.accounts {
 		if acc.ShortName == shortName {
 			self.selectedAccount = &acc
+			self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
 			return &acc
 		}
 	}
@@ -47,6 +57,7 @@ func (self *Store) selectEmail(index int) *model.Email {
 	}
 
 	self.selectedEmail = &self.selectedAccount.Emails[index]
+	self.events.Fire(EMAIL_SELECTED, map[string]any{"selectedEmail": self.selectedEmail})
 	return self.selectedEmail
 
 }
