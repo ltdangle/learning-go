@@ -30,29 +30,29 @@ func newAccountsV(e events.IEvent, items []string) *accounts {
 func (self *accounts) initView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 
 	var err error
-	if T.AccountsV.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
+	if self.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		T.AccountsV.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
-		T.AccountsV.view.Autoscroll = true
-		T.AccountsV.view.Highlight = true
-		T.AccountsV.view.SelBgColor = gocui.ColorGreen
-		T.AccountsV.view.SelFgColor = gocui.ColorBlack
+		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
+		self.view.Autoscroll = true
+		self.view.Highlight = true
+		self.view.SelBgColor = gocui.ColorGreen
+		self.view.SelFgColor = gocui.ColorBlack
 
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
 			return err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, T.AccountsV.cursorDown); err != nil {
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDown); err != nil {
 			return err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, T.AccountsV.cursorUp); err != nil {
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUp); err != nil {
 			return err
 		}
 
-		T.AccountsV.populate()
+		self.populate()
 	}
 	return nil
 }
