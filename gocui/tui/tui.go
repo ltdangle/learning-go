@@ -6,8 +6,8 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
-	"learngocui/events"
-	"learngocui/vm"
+	"learngocui/tui/events"
+	"learngocui/tui/vm"
 	"log"
 )
 

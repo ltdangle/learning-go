@@ -3,7 +3,7 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
-	"learngocui/events"
+	"learngocui/tui/events"
 	"strconv"
 )
 

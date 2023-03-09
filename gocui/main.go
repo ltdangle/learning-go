@@ -1,10 +1,10 @@
 package main
 
 import (
-	"learngocui/events"
 	"learngocui/model"
 	"learngocui/tui"
-	"learngocui/vm"
+	"learngocui/tui/events"
+	"learngocui/tui/vm"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package vm
 
 import (
-	"learngocui/events"
 	"learngocui/model"
+	"learngocui/tui/events"
 )
 
 const (
