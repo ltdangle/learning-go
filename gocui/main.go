@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	e := events.CreateTuiEventManager()
+	e := events.NewEventManager()
 	vm := vm.NewStore(e)
 	seed := repository.SeedData()
 	vm.SetAccounts(seed)

@@ -17,7 +17,7 @@ type EventManager struct {
 }
 
 // constructor
-func CreateTuiEventManager() *EventManager {
+func NewEventManager() *EventManager {
 	return &EventManager{}
 }
 
