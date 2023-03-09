@@ -8,5 +8,5 @@ import (
 func main() {
 	// Add some emails to the slice
 	emailAccounts := repository.SeedData()
-	tui.Tui(emailAccounts)
+	tui.Init(emailAccounts)
 }

@@ -15,6 +15,11 @@ type emailsV struct {
 	event        events.IEvent
 }
 
+const (
+	EMAILS_CURSOR_DOWN_EVENT = "emails_cursor_down"
+	EMAILS_CURSOR_UP_EVENT   = "emails_cursor_up"
+)
+
 func createEmailsView(event events.IEvent, gui *gocui.Gui, accountsRepo repository.IAccountRepository, startX, startY, endX, endY int) (*emailsV, error) {
 	var err error
 	self := &emailsV{}
@@ -72,7 +77,7 @@ func (self *emailsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 		tuiLog(g, "Cursor down: "+strconv.Itoa(cy))
-		self.event.Fire(events.UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(EMAILS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
@@ -95,7 +100,7 @@ func (self *emailsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
 		}
 
 		tuiLog(g, "Cursor up: "+strconv.Itoa(cy))
-		self.event.Fire(events.UPDATE_EMAIL_PREVIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(EMAILS_CURSOR_UP_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }

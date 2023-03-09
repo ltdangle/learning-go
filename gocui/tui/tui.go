@@ -5,9 +5,14 @@ package tui
 
 import (
 	"fmt"
+	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
+	"learngocui/events"
 	"learngocui/model"
+	"learngocui/repository"
+	"learngocui/store"
 	"log"
+	"strconv"
 )
 
 const (
@@ -35,17 +40,32 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 
 var Gui *gocui.Gui
 
-func Tui(emails []model.EmailAccount) {
+type Tui struct {
+	Gui       *gocui.Gui
+	AccountsV *accounts
+	EmailsV   *emailsV
+	PreviewV  *previewV
+	BottomV   *bottomV
+	Events    *events.EventManager
+}
+
+var T = &Tui{}
+
+func Init(emails []model.EmailAccount) {
 
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
+	T.Gui = g
 	defer g.Close()
 
 	g.Highlight = true
 	g.Cursor = true
 	g.SelFgColor = gocui.ColorMagenta
+
+	eventManager := events.CreateTuiEventManager(g)
+	T.AccountsV = newAccountsV(eventManager, []string{"one", "two", "three"})
 
 	g.SetManagerFunc(layout)
 
@@ -59,11 +79,31 @@ func Tui(emails []model.EmailAccount) {
 		log.Panicln(err)
 	}
 
+	s := store.NewStore(T.Events)
+	seed := repository.SeedData()
+	s.SetAccounts(seed)
+	fmt.Print(T)
+
+	eventListeners()
+
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
 }
+func eventListeners() {
+	event.On(ACCOUNTS_CURSOR_DOWN_EVENT, event.ListenerFunc(func(e event.Event) error {
+		selectedItem := e.Data()["selectedItem"].(int)
+		tuiLog(T.Gui, "handle event from eventManager: "+EMAILS_CURSOR_DOWN_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
 
+		return nil
+	}), event.Normal)
+
+	event.On(ACCOUNTS_CURSOR_UP_EVENT, event.ListenerFunc(func(e event.Event) error {
+		selectedItem := e.Data()["selectedItem"].(int)
+		tuiLog(T.Gui, "handle event from eventManager: "+EMAILS_CURSOR_UP_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
+		return nil
+	}), event.Normal)
+}
 func tuiLog(g *gocui.Gui, message string) {
 
 	logV, _ := g.View(BOTTOM_VIEW)

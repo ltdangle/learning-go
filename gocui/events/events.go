@@ -14,15 +14,15 @@ const (
 	UPDATE_EMAIL_PREVIEW = "update_emails_preview"
 )
 
-type eventManager struct {
+type EventManager struct {
 	gui *gocui.Gui
 }
 
 // constructor
-func CreateTuiEventManager(gui *gocui.Gui) *eventManager {
-	return &eventManager{gui}
+func CreateTuiEventManager(gui *gocui.Gui) *EventManager {
+	return &EventManager{gui}
 }
 
-func (self *eventManager) Fire(name string, params map[string]any) {
+func (self *EventManager) Fire(name string, params map[string]any) {
 	event.MustFire(name, params)
 }

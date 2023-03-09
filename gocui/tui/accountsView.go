@@ -7,62 +7,73 @@ import (
 	"strconv"
 )
 
-// accountsV email accounts view
-type accountsV struct {
+// accounts email accounts view
+type accounts struct {
 	// items to be displayed
-	items   []string
-	view    *gocui.View
-	emailsV *emailsV
-	event   events.IEvent
+	items []string
+	view  *gocui.View
+	event events.IEvent
 }
 
-func createAccountsView(event events.IEvent, gui *gocui.Gui, emailsV *emailsV, startX, startY, endX, endY int) (*accountsV, error) {
+const (
+	ACCOUNTS_CURSOR_DOWN_EVENT = "accounts_cursor_down"
+	ACCOUNTS_CURSOR_UP_EVENT   = "accounts_cursor_up"
+)
+
+func newAccountsV(e events.IEvent, items []string) *accounts {
+	return &accounts{
+		items: items,
+		event: e,
+	}
+}
+
+func (self *accounts) initView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 
 	var err error
-	self := &accountsV{}
-	self.emailsV = emailsV
-	self.event = event
-	if self.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
+	if T.AccountsV.view, err = gui.SetView(ACCOUNTS_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
-			return nil, err
+			return err
 		}
-		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
-		self.view.Autoscroll = true
-		self.view.Highlight = true
-		self.view.SelBgColor = gocui.ColorGreen
-		self.view.SelFgColor = gocui.ColorBlack
+		T.AccountsV.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Accounts"
+		T.AccountsV.view.Autoscroll = true
+		T.AccountsV.view.Highlight = true
+		T.AccountsV.view.SelBgColor = gocui.ColorGreen
+		T.AccountsV.view.SelFgColor = gocui.ColorBlack
 
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
-			return nil, err
+			return err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, self.cursorDown); err != nil {
-			return nil, err
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowDown, gocui.ModNone, T.AccountsV.cursorDown); err != nil {
+			return err
 		}
 
-		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, self.cursorUp); err != nil {
-			return nil, err
+		if err = gui.SetKeybinding(ACCOUNTS_VIEW, gocui.KeyArrowUp, gocui.ModNone, T.AccountsV.cursorUp); err != nil {
+			return err
 		}
+
+		T.AccountsV.populate()
 	}
-	return self, nil
+	return nil
 }
 
-func (self *accountsV) populate(items []string) {
-	self.items = items
-	for _, item := range items {
+func (self *accounts) populate() {
+	self.view.Clear()
+	for _, item := range self.items {
 		fmt.Fprintln(self.view, item)
 	}
 }
 
-func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
+func (self *accounts) cursorDown(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		cx, cy := v.Cursor()
 		selectedItem := cy + 1
 
-		// TODO: 5?
-		if selectedItem == 5 {
+		// we've reached the end of the list
+		if selectedItem == len(self.items) {
 			return nil
 		}
+
 		if err := v.SetCursor(cx, cy+1); err != nil {
 			ox, oy := v.Origin()
 			if err := v.SetOrigin(ox, oy+1); err != nil {
@@ -74,12 +85,12 @@ func (self accountsV) cursorDown(g *gocui.Gui, v *gocui.View) error {
 		selectedText, _ := v.Line(selectedItem)
 		self.log(g, "Selected text: "+selectedText)
 
-		self.event.Fire(events.UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(ACCOUNTS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
 
-func (self accountsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
+func (self *accounts) cursorUp(g *gocui.Gui, v *gocui.View) error {
 	if v != nil {
 		ox, oy := v.Origin()
 		cx, cy := v.Cursor()
@@ -95,11 +106,11 @@ func (self accountsV) cursorUp(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		self.event.Fire(events.UPDATE_EMAILS_VIEW, map[string]any{"selectedItem": selectedItem})
+		self.event.Fire(ACCOUNTS_CURSOR_UP_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
 }
 
-func (self accountsV) log(g *gocui.Gui, msg string) {
+func (self *accounts) log(g *gocui.Gui, msg string) {
 	tuiLog(g, msg)
 }
