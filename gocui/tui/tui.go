@@ -70,8 +70,10 @@ func Init(emails []model.EmailAccount) {
 
 	e := events.CreateTuiEventManager(g)
 	T.AccountsV = newAccountsV(e, vm.GetAccountNames())
-	T.EmailsV = newEmails(e)
+	T.EmailsV = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
 	// TODO: continue...
+
+	eventListeners()
 
 	g.SetManagerFunc(layout)
 
@@ -84,8 +86,6 @@ func Init(emails []model.EmailAccount) {
 	if err := g.SetKeybinding("", gocui.KeyTab, gocui.ModNone, goToNextView); err != nil {
 		log.Panicln(err)
 	}
-
-	eventListeners()
 
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)

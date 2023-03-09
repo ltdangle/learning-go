@@ -39,7 +39,7 @@ func (self *accounts) initView(gui *gocui.Gui, startX, startY, endX, endY int) e
 		self.view.Highlight = true
 		self.view.SelBgColor = gocui.ColorGreen
 		self.view.SelFgColor = gocui.ColorBlack
-
+		
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
 			return err
 		}

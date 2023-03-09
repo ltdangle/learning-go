@@ -16,3 +16,11 @@ type EmailAccount struct {
 	// Email collection
 	Emails []Email
 }
+
+func (self *EmailAccount) GetEmailsAsList() []string {
+	var list []string
+	for _, email := range self.Emails {
+		list = append(list, email.Subject)
+	}
+	return list
+}
