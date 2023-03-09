@@ -20,10 +20,10 @@ const (
 	ACCOUNTS_CURSOR_UP_EVENT   = "accounts_cursor_up"
 )
 
-func newAccountsV(e events.IEvent, items []string) *accounts {
+func newAccountsV(event events.IEvent, items []string) *accounts {
 	return &accounts{
 		items: items,
-		event: e,
+		event: event,
 	}
 }
 

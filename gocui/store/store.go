@@ -61,3 +61,11 @@ func (self *Store) SelectEmail(index int) *model.Email {
 	return self.selectedEmail
 
 }
+
+func (self *Store) GetAccountNames() []string {
+	accounts := []string{}
+	for _, acc := range self.accounts {
+		accounts = append(accounts, acc.ShortName)
+	}
+	return accounts
+}

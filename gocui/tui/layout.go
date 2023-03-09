@@ -43,7 +43,7 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 
-	if T.EmailsV, err = createEmailsView(T.Events, gui, accountRepository, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if err = T.EmailsV.initView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
 

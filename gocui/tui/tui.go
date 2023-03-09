@@ -43,7 +43,7 @@ var Gui *gocui.Gui
 type Tui struct {
 	Gui       *gocui.Gui
 	AccountsV *accounts
-	EmailsV   *emailsV
+	EmailsV   *emails
 	PreviewV  *previewV
 	BottomV   *bottomV
 	Events    *events.EventManager
@@ -64,8 +64,14 @@ func Init(emails []model.EmailAccount) {
 	g.Cursor = true
 	g.SelFgColor = gocui.ColorMagenta
 
-	eventManager := events.CreateTuiEventManager(g)
-	T.AccountsV = newAccountsV(eventManager, []string{"one", "two", "three"})
+	vm := store.NewStore(T.Events)
+	seed := repository.SeedData()
+	vm.SetAccounts(seed)
+
+	e := events.CreateTuiEventManager(g)
+	T.AccountsV = newAccountsV(e, vm.GetAccountNames())
+	T.EmailsV = newEmails(e)
+	// TODO: continue...
 
 	g.SetManagerFunc(layout)
 
@@ -78,11 +84,6 @@ func Init(emails []model.EmailAccount) {
 	if err := g.SetKeybinding("", gocui.KeyTab, gocui.ModNone, goToNextView); err != nil {
 		log.Panicln(err)
 	}
-
-	s := store.NewStore(T.Events)
-	seed := repository.SeedData()
-	s.SetAccounts(seed)
-	fmt.Print(T)
 
 	eventListeners()
 

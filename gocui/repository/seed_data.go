@@ -394,7 +394,7 @@ func SeedData() []model.EmailAccount {
 	emailAccounts := []model.EmailAccount{
 		{
 			AccountType:       "regular",
-			ShortName:         "John Smith",
+			ShortName:         "Inbox",
 			Email:             "john.smith@example.com",
 			InboxShellCommand: "ls /path/to/inbox",
 			TrashFolder:       "/path/to/trash",
@@ -403,7 +403,7 @@ func SeedData() []model.EmailAccount {
 		},
 		{
 			AccountType:       "virtual",
-			ShortName:         "Jane Doe",
+			ShortName:         "Important",
 			Email:             "jane.doe@example.com",
 			InboxShellCommand: "notmuch search --output=files tag:inbox",
 			TrashFolder:       "/path/to/trash",
@@ -412,7 +412,7 @@ func SeedData() []model.EmailAccount {
 		},
 		{
 			AccountType:       "regular",
-			ShortName:         "Bob Johnson",
+			ShortName:         "Work",
 			Email:             "bob.johnson@example.com",
 			InboxShellCommand: "ls /path/to/inbox",
 			TrashFolder:       "/path/to/trash",
@@ -421,7 +421,7 @@ func SeedData() []model.EmailAccount {
 		},
 		{
 			AccountType:       "virtual",
-			ShortName:         "Alice Williams",
+			ShortName:         "Home",
 			Email:             "alice.williams@example.com",
 			InboxShellCommand: "notmuch search --output=files tag:inbox",
 			TrashFolder:       "/path/to/trash",
@@ -430,7 +430,7 @@ func SeedData() []model.EmailAccount {
 		},
 		{
 			AccountType:       "regular",
-			ShortName:         "Charlie Brown",
+			ShortName:         "Football",
 			Email:             "charlie.brown@example.com",
 			InboxShellCommand: "ls /path/to/inbox",
 			TrashFolder:       "/path/to/trash",
