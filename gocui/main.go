@@ -2,16 +2,16 @@ package main
 
 import (
 	"learngocui/events"
-	"learngocui/repository"
+	"learngocui/model"
 	"learngocui/tui"
 	"learngocui/vm"
 )
 
 func main() {
 	e := events.NewEventManager()
-	vm := vm.NewStore(e)
-	seed := repository.SeedData()
-	vm.SetAccounts(seed)
+	viewModel := vm.NewStore(e)
+	seed := model.SeedData()
+	viewModel.SetAccounts(seed)
 
-	tui.Init(e, vm)
+	tui.Init(e, viewModel)
 }

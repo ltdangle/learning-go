@@ -1,12 +1,11 @@
-package repository
+package model
 
 import (
-	"learngocui/model"
 	"math/rand"
 )
 
-func SeedData() []model.EmailAccount {
-	emails1 := []model.Email{
+func SeedData() []EmailAccount {
+	emails1 := []Email{
 		{
 			Id:          rand.Intn(100),
 			Path:        "/1/email1",
@@ -83,7 +82,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 	}
-	emails2 := []model.Email{
+	emails2 := []Email{
 		{
 			Id:          rand.Intn(100),
 			Path:        "/2/email1",
@@ -160,7 +159,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 	}
-	emails3 := []model.Email{
+	emails3 := []Email{
 		{
 			Id:          rand.Intn(100),
 			Path:        "/3/email1",
@@ -237,7 +236,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 	}
-	emails4 := []model.Email{
+	emails4 := []Email{
 		{
 			Id:          rand.Intn(100),
 			Path:        "/4/email1",
@@ -314,7 +313,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 	}
-	emails5 := []model.Email{
+	emails5 := []Email{
 		{
 			Id:          rand.Intn(100),
 			Path:        "/5/email1",
@@ -391,7 +390,7 @@ func SeedData() []model.EmailAccount {
 			IsSelected:  false,
 		},
 	}
-	emailAccounts := []model.EmailAccount{
+	emailAccounts := []EmailAccount{
 		{
 			AccountType:       "regular",
 			ShortName:         "Inbox",

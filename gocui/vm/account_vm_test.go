@@ -2,7 +2,6 @@ package vm
 
 import (
 	"learngocui/model"
-	"learngocui/repository"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ func (self *MockEvents) Fire(name string, params map[string]any) {
 func setup() (*ViewModel, []model.EmailAccount) {
 	events := &MockEvents{}
 	store := NewStore(events)
-	seed := repository.SeedData()
+	seed := model.SeedData()
 	store.SetAccounts(seed)
 	return store, seed
 }
