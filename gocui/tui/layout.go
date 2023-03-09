@@ -49,7 +49,7 @@ func layout(gui *gocui.Gui) error {
 		return err
 	}
 
-	if T.BottomV, err = createBottomView(gui, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
+	if err = T.bottom.initView(gui, bottomStartX, bottomStartY, bottomEndX, bottomEndY); err != nil {
 		return err
 	}
 

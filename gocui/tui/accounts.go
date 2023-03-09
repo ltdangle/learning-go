@@ -39,7 +39,7 @@ func (self *accounts) initView(gui *gocui.Gui, startX, startY, endX, endY int) e
 		self.view.Highlight = true
 		self.view.SelBgColor = gocui.ColorGreen
 		self.view.SelFgColor = gocui.ColorBlack
-		
+
 		if _, err = setCurrentViewOnTop(gui, ACCOUNTS_VIEW); err != nil {
 			return err
 		}
@@ -81,9 +81,9 @@ func (self *accounts) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		self.log(g, "Selected item: "+strconv.Itoa(selectedItem))
+		self.log("Selected item: " + strconv.Itoa(selectedItem))
 		selectedText, _ := v.Line(selectedItem)
-		self.log(g, "Selected text: "+selectedText)
+		self.log("Selected text: " + selectedText)
 
 		self.event.Fire(ACCOUNTS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
@@ -111,6 +111,6 @@ func (self *accounts) cursorUp(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
-func (self *accounts) log(g *gocui.Gui, msg string) {
-	tuiLog(g, msg)
+func (self *accounts) log(msg string) {
+	tuiLog(msg)
 }

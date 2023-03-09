@@ -73,7 +73,7 @@ func (self *emails) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		tuiLog(g, "Cursor down: "+strconv.Itoa(cy))
+		tuiLog("Cursor down: " + strconv.Itoa(cy))
 		self.event.Fire(EMAILS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil
@@ -95,7 +95,7 @@ func (self *emails) cursorUp(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		tuiLog(g, "Cursor up: "+strconv.Itoa(cy))
+		tuiLog("Cursor up: " + strconv.Itoa(cy))
 		self.event.Fire(EMAILS_CURSOR_UP_EVENT, map[string]any{"selectedItem": selectedItem})
 	}
 	return nil

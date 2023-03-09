@@ -2,7 +2,6 @@ package events
 
 import (
 	"github.com/gookit/event"
-	"github.com/jroimartin/gocui"
 )
 
 type IEvent interface {
@@ -15,12 +14,11 @@ const (
 )
 
 type EventManager struct {
-	gui *gocui.Gui
 }
 
 // constructor
-func CreateTuiEventManager(gui *gocui.Gui) *EventManager {
-	return &EventManager{gui}
+func CreateTuiEventManager() *EventManager {
+	return &EventManager{}
 }
 
 func (self *EventManager) Fire(name string, params map[string]any) {

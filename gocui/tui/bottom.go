@@ -9,15 +9,18 @@ type bottom struct {
 	view *gocui.View
 }
 
-func createBottomView(gui *gocui.Gui, startX, startY, endX, endY int) (*bottom, error) {
+func newBottom() *bottom {
+	return &bottom{}
+}
+
+func (self *bottom) initView(gui *gocui.Gui, startX, startY, endX, endY int) error {
 	var err error
-	self := &bottom{}
 	if self.view, err = gui.SetView(BOTTOM_VIEW, startX, startY, endX, endY); err != nil {
 		if err != gocui.ErrUnknownView {
-			return nil, err
+			return err
 		}
 		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " tuiLog"
 		self.view.Editable = true
 	}
-	return self, nil
+	return nil
 }

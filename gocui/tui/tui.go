@@ -40,11 +40,12 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 var Gui *gocui.Gui
 
 type Tui struct {
+	gui      *gocui.Gui
 	accounts *accounts
 	emails   *emails
 	preview  *preview
-	BottomV  *bottom
-	Events   *events.EventManager
+	bottom   *bottom
+	events   *events.EventManager
 }
 
 var T = &Tui{}
@@ -57,21 +58,22 @@ func Init() {
 	}
 	defer g.Close()
 
+	T.gui = g
 	g.Highlight = true
 	g.Cursor = true
 	g.SelFgColor = gocui.ColorMagenta
 
-	vm := store.NewStore(T.Events)
+	vm := store.NewStore(T.events)
 	seed := repository.SeedData()
 	vm.SetAccounts(seed)
 
-	e := events.CreateTuiEventManager(g)
+	e := events.CreateTuiEventManager()
 	T.accounts = newAccountsV(e, vm.GetAccountNames())
 	T.emails = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
 	T.preview = newPreview(vm.GetSelectedEmail())
-	// TODO: continue...
+	T.bottom = newBottom()
 
-	eventListeners(g)
+	eventListeners()
 
 	g.SetManagerFunc(layout)
 
@@ -89,23 +91,23 @@ func Init() {
 		log.Panicln(err)
 	}
 }
-func eventListeners(g *gocui.Gui) {
+func eventListeners() {
 	event.On(ACCOUNTS_CURSOR_DOWN_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(g, "handle event from eventManager: "+EMAILS_CURSOR_DOWN_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_DOWN_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
 
 		return nil
 	}), event.Normal)
 
 	event.On(ACCOUNTS_CURSOR_UP_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(g, "handle event from eventManager: "+EMAILS_CURSOR_UP_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_UP_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
 		return nil
 	}), event.Normal)
 }
-func tuiLog(g *gocui.Gui, message string) {
 
-	logV, _ := g.View(BOTTOM_VIEW)
+func tuiLog(message string) {
+	logV, _ := T.gui.View(BOTTOM_VIEW)
 	logV.Clear()
 	fmt.Fprintln(logV, message)
 }
