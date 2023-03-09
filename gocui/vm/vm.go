@@ -1,4 +1,4 @@
-package store
+package vm
 
 import (
 	"learngocui/events"
@@ -10,37 +10,37 @@ const (
 	EMAIL_SELECTED   = "email selected"
 )
 
-type Store struct {
+type ViewModel struct {
 	accounts        []model.EmailAccount
 	selectedAccount *model.EmailAccount
 	selectedEmail   *model.Email
 	events          events.IEvent
 }
 
-func NewStore(events events.IEvent) *Store {
-	return &Store{events: events}
+func NewStore(events events.IEvent) *ViewModel {
+	return &ViewModel{events: events}
 }
 
-func (self *Store) SetAccounts(accounts []model.EmailAccount) {
+func (self *ViewModel) SetAccounts(accounts []model.EmailAccount) {
 	self.accounts = accounts
 	// set default values
 	self.selectedAccount = &accounts[0]
 	self.selectedEmail = &self.selectedAccount.Emails[0]
 }
 
-func (self *Store) AddAccount(account model.EmailAccount) {
+func (self *ViewModel) AddAccount(account model.EmailAccount) {
 	self.accounts = append(self.accounts, account)
 }
 
-func (self *Store) GetSelectedtAccount() *model.EmailAccount {
+func (self *ViewModel) GetSelectedtAccount() *model.EmailAccount {
 	return self.selectedAccount
 }
 
-func (self *Store) GetSelectedEmail() *model.Email {
+func (self *ViewModel) GetSelectedEmail() *model.Email {
 	return self.selectedEmail
 }
 
-func (self *Store) SelectAccount(shortName string) *model.EmailAccount {
+func (self *ViewModel) SelectAccount(shortName string) *model.EmailAccount {
 	for _, acc := range self.accounts {
 		if acc.ShortName == shortName {
 			self.selectedAccount = &acc
@@ -51,7 +51,7 @@ func (self *Store) SelectAccount(shortName string) *model.EmailAccount {
 	return nil
 }
 
-func (self *Store) SelectEmail(index int) *model.Email {
+func (self *ViewModel) SelectEmail(index int) *model.Email {
 	if index >= len(self.selectedAccount.Emails) {
 		return nil
 	}
@@ -62,7 +62,7 @@ func (self *Store) SelectEmail(index int) *model.Email {
 
 }
 
-func (self *Store) GetAccountNames() []string {
+func (self *ViewModel) GetAccountNames() []string {
 	accounts := []string{}
 	for _, acc := range self.accounts {
 		accounts = append(accounts, acc.ShortName)

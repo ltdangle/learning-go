@@ -1,4 +1,4 @@
-package store
+package vm
 
 import (
 	"learngocui/model"
@@ -12,7 +12,7 @@ type MockEvents struct{}
 func (self *MockEvents) Fire(name string, params map[string]any) {
 }
 
-func setup() (*Store, []model.EmailAccount) {
+func setup() (*ViewModel, []model.EmailAccount) {
 	events := &MockEvents{}
 	store := NewStore(events)
 	seed := repository.SeedData()

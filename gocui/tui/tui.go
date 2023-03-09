@@ -5,13 +5,10 @@ package tui
 
 import (
 	"fmt"
-	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
 	"learngocui/events"
-	"learngocui/repository"
-	"learngocui/store"
+	"learngocui/vm"
 	"log"
-	"strconv"
 )
 
 const (
@@ -50,24 +47,19 @@ type Tui struct {
 
 var T = &Tui{}
 
-func Init() {
+func Init(e events.IEvent, vm *vm.ViewModel) {
 
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
 	defer g.Close()
-
 	T.gui = g
+
 	g.Highlight = true
 	g.Cursor = true
 	g.SelFgColor = gocui.ColorMagenta
 
-	vm := store.NewStore(T.events)
-	seed := repository.SeedData()
-	vm.SetAccounts(seed)
-
-	e := events.CreateTuiEventManager()
 	T.accounts = newAccountsV(e, vm.GetAccountNames())
 	T.emails = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
 	T.preview = newPreview(vm.GetSelectedEmail())
@@ -90,20 +82,6 @@ func Init() {
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
 	}
-}
-func eventListeners() {
-	event.On(ACCOUNTS_CURSOR_DOWN_EVENT, event.ListenerFunc(func(e event.Event) error {
-		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_DOWN_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
-
-		return nil
-	}), event.Normal)
-
-	event.On(ACCOUNTS_CURSOR_UP_EVENT, event.ListenerFunc(func(e event.Event) error {
-		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_UP_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
-		return nil
-	}), event.Normal)
 }
 
 func tuiLog(message string) {
