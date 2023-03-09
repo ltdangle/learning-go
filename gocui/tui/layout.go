@@ -2,7 +2,6 @@ package tui
 
 import (
 	"github.com/jroimartin/gocui"
-	"learngocui/repository"
 )
 
 func layout(gui *gocui.Gui) error {
@@ -37,17 +36,16 @@ func layout(gui *gocui.Gui) error {
 	previewEndY := mainViewEndY
 
 	var err error
-	accountRepository := repository.NewSeedAccountRepository(repository.SeedData())
 
-	if err = T.AccountsV.initView(gui, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
+	if err = T.accounts.initView(gui, accountsStartX, accountsStartY, accountsEndX, accountsEndY); err != nil {
 		return err
 	}
 
-	if err = T.EmailsV.initView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
+	if err = T.emails.initView(gui, emailsStartX, emailsStartY, emailsEndX, emailsEndY); err != nil {
 		return err
 	}
 
-	if T.PreviewV, err = createPreviewView(gui, accountRepository, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
+	if err = T.preview.initView(gui, previewStartX, previewStartY, previewEndX, previewEndY); err != nil {
 		return err
 	}
 

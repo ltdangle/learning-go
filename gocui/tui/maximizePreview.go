@@ -12,7 +12,7 @@ func maximizePreview(g *gocui.Gui, v *gocui.View) error {
 	}
 
 	bottomV.Clear()
-	//fmt.Fprintln(bottomV, "maximizePreview")
+	//fmt.Fprintln(bottom, "maximizePreview")
 
 	maxPreviewV, err := g.SetView("MAXIMIZE_PREVIEW", 1, 1, 40, 20)
 	maxPreviewV.Wrap = true

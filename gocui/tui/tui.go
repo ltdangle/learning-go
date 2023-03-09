@@ -8,7 +8,6 @@ import (
 	"github.com/gookit/event"
 	"github.com/jroimartin/gocui"
 	"learngocui/events"
-	"learngocui/model"
 	"learngocui/repository"
 	"learngocui/store"
 	"log"
@@ -41,23 +40,21 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 var Gui *gocui.Gui
 
 type Tui struct {
-	Gui       *gocui.Gui
-	AccountsV *accounts
-	EmailsV   *emails
-	PreviewV  *previewV
-	BottomV   *bottomV
-	Events    *events.EventManager
+	accounts *accounts
+	emails   *emails
+	preview  *preview
+	BottomV  *bottom
+	Events   *events.EventManager
 }
 
 var T = &Tui{}
 
-func Init(emails []model.EmailAccount) {
+func Init() {
 
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
 	}
-	T.Gui = g
 	defer g.Close()
 
 	g.Highlight = true
@@ -69,11 +66,12 @@ func Init(emails []model.EmailAccount) {
 	vm.SetAccounts(seed)
 
 	e := events.CreateTuiEventManager(g)
-	T.AccountsV = newAccountsV(e, vm.GetAccountNames())
-	T.EmailsV = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
+	T.accounts = newAccountsV(e, vm.GetAccountNames())
+	T.emails = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
+	T.preview = newPreview(vm.GetSelectedEmail())
 	// TODO: continue...
 
-	eventListeners()
+	eventListeners(g)
 
 	g.SetManagerFunc(layout)
 
@@ -91,17 +89,17 @@ func Init(emails []model.EmailAccount) {
 		log.Panicln(err)
 	}
 }
-func eventListeners() {
+func eventListeners(g *gocui.Gui) {
 	event.On(ACCOUNTS_CURSOR_DOWN_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(T.Gui, "handle event from eventManager: "+EMAILS_CURSOR_DOWN_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog(g, "handle event from eventManager: "+EMAILS_CURSOR_DOWN_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
 
 		return nil
 	}), event.Normal)
 
 	event.On(ACCOUNTS_CURSOR_UP_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog(T.Gui, "handle event from eventManager: "+EMAILS_CURSOR_UP_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
+		tuiLog(g, "handle event from eventManager: "+EMAILS_CURSOR_UP_EVENT+", selectedItem: "+strconv.Itoa(selectedItem))
 		return nil
 	}), event.Normal)
 }
