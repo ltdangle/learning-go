@@ -5,67 +5,46 @@ import (
 	"learngocui/tui/events"
 )
 
-const (
-	ACCOUNT_SELECTED = "account selected"
-	EMAIL_SELECTED   = "email selected"
-)
-
-type ViewModel struct {
-	accounts        []model.EmailAccount
-	selectedAccount *model.EmailAccount
-	selectedEmail   *model.Email
-	events          events.IEvent
+// accountVM email account view model
+type accountVM struct {
+	account       model.EmailAccount
+	selectedEmail *model.Email
+	events        events.IEvent
 }
 
-func NewStore(events events.IEvent) *ViewModel {
-	return &ViewModel{events: events}
-}
-
-func (self *ViewModel) SetAccounts(accounts []model.EmailAccount) {
-	self.accounts = accounts
-	// set default values
-	self.selectedAccount = &accounts[0]
-	self.selectedEmail = &self.selectedAccount.Emails[0]
-}
-
-func (self *ViewModel) AddAccount(account model.EmailAccount) {
-	self.accounts = append(self.accounts, account)
-}
-
-func (self *ViewModel) GetSelectedtAccount() *model.EmailAccount {
-	return self.selectedAccount
-}
-
-func (self *ViewModel) GetSelectedEmail() *model.Email {
-	return self.selectedEmail
-}
-
-func (self *ViewModel) SelectAccount(shortName string) *model.EmailAccount {
-	for _, acc := range self.accounts {
-		if acc.ShortName == shortName {
-			self.selectedAccount = &acc
-			self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
-			return &acc
-		}
+func NewAccountVM(events events.IEvent) *accountVM {
+	return &accountVM{
+		account:       model.EmailAccount{},
+		events:        events,
+		selectedEmail: nil,
 	}
-	return nil
 }
 
-func (self *ViewModel) SelectEmail(index int) *model.Email {
-	if index >= len(self.selectedAccount.Emails) {
+func (self *accountVM) SetAccount(account model.EmailAccount) {
+	self.account = account
+}
+
+func (self *accountVM) GetAccount() model.EmailAccount {
+	return self.account
+}
+
+func (self *accountVM) SelectEmail(index int) *model.Email {
+	if index >= len(self.account.Emails) {
 		return nil
 	}
 
-	self.selectedEmail = &self.selectedAccount.Emails[index]
+	self.selectedEmail = &self.account.Emails[index]
 	self.events.Fire(EMAIL_SELECTED, map[string]any{"selectedEmail": self.selectedEmail})
 	return self.selectedEmail
-
+}
+func (self *accountVM) GetSelectedEmail() *model.Email {
+	return self.selectedEmail
 }
 
-func (self *ViewModel) GetAccountNames() []string {
-	accounts := []string{}
-	for _, acc := range self.accounts {
-		accounts = append(accounts, acc.ShortName)
+func (self *accountVM) GetEmailsAsList() []string {
+	var emails []string
+	for _, email := range self.account.Emails {
+		emails = append(emails, email.Subject)
 	}
-	return accounts
+	return emails
 }

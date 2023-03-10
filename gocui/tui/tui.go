@@ -62,7 +62,7 @@ func Init(e events.IEvent, vm *vm.ViewModel) {
 
 	T.accounts = newAccountsV(e, vm.GetAccountNames())
 	T.emails = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
-	T.preview = newPreview(vm.GetSelectedEmail())
+	T.preview = newPreview(vm.GetSelectedtAccount().GetSelectedEmail())
 	T.bottom = newBottom()
 
 	eventListeners()

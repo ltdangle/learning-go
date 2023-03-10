@@ -1,43 +1,40 @@
 package vm
 
 import (
-	"learngocui/model"
+	"reflect"
 	"testing"
 )
 
-// mocks
-type MockEvents struct{}
-
-func (self *MockEvents) Fire(name string, params map[string]any) {
+type mockEvent struct {
 }
 
-func setup() (*ViewModel, []model.EmailAccount) {
-	events := &MockEvents{}
-	store := NewStore(events)
-	seed := model.SeedData()
-	store.SetAccounts(seed)
-	return store, seed
+func (self *mockEvent) Fire(name string, params map[string]any) {}
+
+func TestGetEmailsAsList(t *testing.T) {
+	vm := NewAccountVM(&mockEvent{})
+	var emails []string
+	emails = vm.GetEmailsAsList()
+	if len(emails) > 0 {
+		t.Errorf("got %v, want %v", emails, []string{})
+	}
+	if !isSliceOfStrings(emails) {
+		t.Errorf("Emails list is not a slice of strings.")
+	}
+
 }
 
-func TestInitialValues(t *testing.T) {
-	store, seed := setup()
-	AssertEqual(t, store.selectedEmail, &seed[0].Emails[0])
+func isSliceOfStrings(value interface{}) bool {
+	// Get the reflect type of the value
+	valueType := reflect.TypeOf(value)
 
-}
+	// Check if the value is a slice
+	if valueType.Kind() != reflect.Slice {
+		return false
+	}
 
-// test selecting arbitrary account
-func TestSelectAccount(t *testing.T) {
-	store, seed := setup()
-	AssertEqual(t, store.SelectAccount(seed[3].ShortName), store.selectedAccount)
-}
-
-func TestSelectEmail(t *testing.T) {
-	store, seed := setup()
-
-	store.SelectAccount(seed[3].ShortName)
-	store.SelectEmail(3)
-
-	AssertEqual(t, store.selectedEmail, &seed[3].Emails[3])
+	// Check if the slice type is []string
+	elementType := valueType.Elem()
+	return elementType.Kind() == reflect.String
 }
 
 func AssertEqual[T comparable](t *testing.T, got, want T) {

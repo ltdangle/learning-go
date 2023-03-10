@@ -1,7 +1,6 @@
 package main
 
 import (
-	"learngocui/model"
 	"learngocui/tui"
 	"learngocui/tui/events"
 	"learngocui/tui/vm"
@@ -9,9 +8,8 @@ import (
 
 func main() {
 	e := events.NewEventManager()
-	viewModel := vm.NewStore(e)
-	seed := model.SeedData()
-	viewModel.SetAccounts(seed)
+	viewModel := vm.NewVM(e)
+	//seed := model.SeedData()
 
 	tui.Init(e, viewModel)
 }
