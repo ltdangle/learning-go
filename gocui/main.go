@@ -11,16 +11,16 @@ func main() {
 	e := events.NewEventManager()
 	seed := model.SeedData()
 
-	acc1 := vm.NewAccountVM(e, &seed[0])
-	acc2 := vm.NewAccountVM(e, &seed[1])
-	acc3 := vm.NewAccountVM(e, &seed[2])
-	acc4 := vm.NewAccountVM(e, &seed[3])
+	accVm1 := vm.NewAccountVM(e, &seed[0])
+	accVm2 := vm.NewAccountVM(e, &seed[1])
+	accVm3 := vm.NewAccountVM(e, &seed[2])
+	accVm4 := vm.NewAccountVM(e, &seed[3])
 
 	viewModel := vm.NewVM(e)
-	viewModel.AddAccount(acc1)
-	viewModel.AddAccount(acc2)
-	viewModel.AddAccount(acc3)
-	viewModel.AddAccount(acc4)
+	viewModel.AddAccount(accVm1)
+	viewModel.AddAccount(accVm2)
+	viewModel.AddAccount(accVm3)
+	viewModel.AddAccount(accVm4)
 
 	tui.Init(e, viewModel)
 }
