@@ -30,7 +30,7 @@ func (self *emails) initView(gui *gocui.Gui, startX, startY, endX, endY int) err
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " Emails"
+		self.view.Title = strconv.Itoa(startX) + " - " + strconv.Itoa(endX) + " emails"
 		self.view.Autoscroll = true
 		self.view.Highlight = true
 		self.view.SelBgColor = gocui.ColorGreen

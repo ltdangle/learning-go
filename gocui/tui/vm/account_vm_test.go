@@ -19,7 +19,7 @@ func TestGetEmailsAsList(t *testing.T) {
 		t.Errorf("got %v, want %v", emails, []string{})
 	}
 	if !isSliceOfStrings(emails) {
-		t.Errorf("Emails list is not a slice of strings.")
+		t.Errorf("emails list is not a slice of strings.")
 	}
 
 }
