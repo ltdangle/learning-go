@@ -10,19 +10,19 @@ const (
 )
 
 type ViewModel struct {
-	accounts        []accountVM
+	accounts        []*accountVM
 	selectedAccount *accountVM
 	events          events.IEvent
 }
 
 func NewVM(events events.IEvent) *ViewModel {
 	return &ViewModel{
-		accounts: []accountVM{},
+		accounts: []*accountVM{},
 		events:   events,
 	}
 }
 
-func (self *ViewModel) AddAccount(account accountVM) {
+func (self *ViewModel) AddAccount(account *accountVM) {
 	self.accounts = append(self.accounts, account)
 }
 
@@ -33,9 +33,9 @@ func (self *ViewModel) GetSelectedtAccount() *accountVM {
 func (self *ViewModel) SelectAccount(shortName string) *accountVM {
 	for _, accVM := range self.accounts {
 		if accVM.GetAccount().ShortName == shortName {
-			self.selectedAccount = &accVM
+			self.selectedAccount = accVM
 			self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
-			return &accVM
+			return accVM
 		}
 	}
 	return nil

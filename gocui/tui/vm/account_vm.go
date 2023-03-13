@@ -7,24 +7,24 @@ import (
 
 // accountVM email account view model
 type accountVM struct {
-	account       model.EmailAccount
+	account       *model.EmailAccount
 	selectedEmail *model.Email
 	events        events.IEvent
 }
 
 func NewAccountVM(events events.IEvent) *accountVM {
 	return &accountVM{
-		account:       model.EmailAccount{},
+		account:       &model.EmailAccount{},
 		events:        events,
 		selectedEmail: nil,
 	}
 }
 
-func (self *accountVM) SetAccount(account model.EmailAccount) {
+func (self *accountVM) SetAccount(account *model.EmailAccount) {
 	self.account = account
 }
 
-func (self *accountVM) GetAccount() model.EmailAccount {
+func (self *accountVM) GetAccount() *model.EmailAccount {
 	return self.account
 }
 
@@ -38,11 +38,19 @@ func (self *accountVM) SelectEmail(index int) *model.Email {
 	return self.selectedEmail
 }
 func (self *accountVM) GetSelectedEmail() *model.Email {
+	if self == nil {
+		return nil
+	}
 	return self.selectedEmail
 }
 
 func (self *accountVM) GetEmailsAsList() []string {
 	var emails []string
+
+	if self == nil {
+		return emails
+	}
+
 	for _, email := range self.account.Emails {
 		emails = append(emails, email.Subject)
 	}

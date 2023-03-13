@@ -34,7 +34,15 @@ func (self *preview) initView(gui *gocui.Gui, startX, startY, endX, endY int) er
 	return nil
 }
 func (self *preview) populate() {
+	if self.view == nil {
+		return
+	}
+	if self.email == nil {
+		return
+	}
+
 	self.view.Clear()
+
 	fmt.Fprintln(self.view, "Date: "+self.email.Date)
 	fmt.Fprintln(self.view, "From: "+self.email.From)
 	fmt.Fprintln(self.view, "To: "+self.email.To)

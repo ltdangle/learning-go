@@ -11,9 +11,10 @@ type mockEvent struct {
 func (self *mockEvent) Fire(name string, params map[string]any) {}
 
 func TestGetEmailsAsList(t *testing.T) {
-	vm := NewAccountVM(&mockEvent{})
+	//vm := NewAccountVM(&mockEvent{})
+	m := NewVM(&mockEvent{})
 	var emails []string
-	emails = vm.GetEmailsAsList()
+	emails = m.GetSelectedtAccount().GetEmailsAsList()
 	if len(emails) > 0 {
 		t.Errorf("got %v, want %v", emails, []string{})
 	}
