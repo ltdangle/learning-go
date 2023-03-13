@@ -2,21 +2,27 @@ package tui
 
 import (
 	"github.com/gookit/event"
-	"strconv"
+	"learngocui/tui/vm"
 )
 
-func AccountEventListeners(t *Tui) {
+func AccountEventListeners(t *Tui, vm *vm.ViewModel) {
 	event.On(ACCOUNTS_CURSOR_DOWN_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_DOWN_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
-		t.populateEmails([]string{"one", "two", "three"})
+		vm.SelectAccount(selectedItem)
+		tuiLog("Selected account: " + vm.GetSelectedtAccount().GetAccount().ShortName)
+		t.populateEmails(vm.GetSelectedtAccount().GetEmailsAsList())
+		//tuiLog(vm.GetSelectedtAccount().GetSelectedEmail().Subject)
+
 		return nil
 	}), event.Normal)
 
 	event.On(ACCOUNTS_CURSOR_UP_EVENT, event.ListenerFunc(func(e event.Event) error {
 		selectedItem := e.Data()["selectedItem"].(int)
-		tuiLog("handle event from eventManager: " + EMAILS_CURSOR_UP_EVENT + ", selectedItem: " + strconv.Itoa(selectedItem))
-		t.populateEmails([]string{"three", "two", "one"})
+		vm.SelectAccount(selectedItem)
+		tuiLog("Selected account: " + vm.GetSelectedtAccount().GetAccount().ShortName)
+		t.populateEmails(vm.GetSelectedtAccount().GetEmailsAsList())
+		//tuiLog(vm.GetSelectedtAccount().GetSelectedEmail().Subject)
+
 		return nil
 	}), event.Normal)
 }

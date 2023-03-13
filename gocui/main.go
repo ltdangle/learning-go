@@ -16,11 +16,11 @@ func main() {
 	accVm3 := vm.NewAccountVM(e, &seed[2])
 	accVm4 := vm.NewAccountVM(e, &seed[3])
 
-	viewModel := vm.NewVM(e)
-	viewModel.AddAccount(accVm1)
-	viewModel.AddAccount(accVm2)
-	viewModel.AddAccount(accVm3)
-	viewModel.AddAccount(accVm4)
+	viewModel := vm.NewVM(e, []*vm.AccountVM{accVm1, accVm2, accVm3, accVm4})
+	//viewModel.AddAccount(accVm1)
+	//viewModel.AddAccount(accVm2)
+	//viewModel.AddAccount(accVm3)
+	//viewModel.AddAccount(accVm4)
 
 	tui.Init(e, viewModel)
 }

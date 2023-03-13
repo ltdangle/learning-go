@@ -5,26 +5,27 @@ import (
 	"learngocui/tui/events"
 )
 
-// accountVM email account view model
-type accountVM struct {
+// AccountVM email account view model
+type AccountVM struct {
 	account       *model.EmailAccount
 	selectedEmail *model.Email
 	events        events.IEvent
 }
 
-func NewAccountVM(events events.IEvent, account *model.EmailAccount) *accountVM {
-	return &accountVM{
-		account:       account,
-		events:        events,
-		selectedEmail: nil,
+func NewAccountVM(events events.IEvent, account *model.EmailAccount) *AccountVM {
+	vm := &AccountVM{
+		account: account,
+		events:  events,
 	}
+	vm.SelectEmail(0)
+	return vm
 }
 
-func (self *accountVM) GetAccount() *model.EmailAccount {
+func (self *AccountVM) GetAccount() *model.EmailAccount {
 	return self.account
 }
 
-func (self *accountVM) SelectEmail(index int) *model.Email {
+func (self *AccountVM) SelectEmail(index int) *model.Email {
 	if index >= len(self.account.Emails) {
 		return nil
 	}
@@ -33,14 +34,14 @@ func (self *accountVM) SelectEmail(index int) *model.Email {
 	self.events.Fire(EMAIL_SELECTED, map[string]any{"selectedEmail": self.selectedEmail})
 	return self.selectedEmail
 }
-func (self *accountVM) GetSelectedEmail() *model.Email {
+func (self *AccountVM) GetSelectedEmail() *model.Email {
 	if self == nil {
 		return nil
 	}
 	return self.selectedEmail
 }
 
-func (self *accountVM) GetEmailsAsList() []string {
+func (self *AccountVM) GetEmailsAsList() []string {
 	var emails []string
 
 	if self == nil {

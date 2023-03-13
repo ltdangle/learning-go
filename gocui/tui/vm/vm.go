@@ -5,40 +5,41 @@ import (
 )
 
 const (
-	ACCOUNT_SELECTED = "account selected"
-	EMAIL_SELECTED   = "email selected"
+	ACCOUNT_SELECTED = "account_selected"
+	EMAIL_SELECTED   = "email_selected"
 )
 
 type ViewModel struct {
-	accounts        []*accountVM
-	selectedAccount *accountVM
+	accounts        []*AccountVM
+	selectedAccount *AccountVM
 	events          events.IEvent
 }
 
-func NewVM(events events.IEvent) *ViewModel {
-	return &ViewModel{
-		accounts: []*accountVM{},
+func NewVM(events events.IEvent, accounts []*AccountVM) *ViewModel {
+	self := &ViewModel{
+		accounts: accounts,
 		events:   events,
 	}
+
+	// select account and email by default
+	self.selectedAccount = self.accounts[0]
+	self.accounts[0].selectedEmail = self.accounts[0].SelectEmail(0)
+
+	return self
 }
 
-func (self *ViewModel) AddAccount(account *accountVM) {
+func (self *ViewModel) AddAccount(account *AccountVM) {
 	self.accounts = append(self.accounts, account)
 }
 
-func (self *ViewModel) GetSelectedtAccount() *accountVM {
+func (self *ViewModel) GetSelectedtAccount() *AccountVM {
 	return self.selectedAccount
 }
 
-func (self *ViewModel) SelectAccount(shortName string) *accountVM {
-	for _, accVM := range self.accounts {
-		if accVM.GetAccount().ShortName == shortName {
-			self.selectedAccount = accVM
-			self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
-			return accVM
-		}
-	}
-	return nil
+func (self *ViewModel) SelectAccount(index int) *AccountVM {
+	self.selectedAccount = self.accounts[index]
+	self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
+	return self.selectedAccount
 }
 
 func (self *ViewModel) GetAccountNames() []string {
