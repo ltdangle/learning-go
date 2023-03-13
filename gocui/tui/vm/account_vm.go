@@ -12,16 +12,12 @@ type accountVM struct {
 	events        events.IEvent
 }
 
-func NewAccountVM(events events.IEvent) *accountVM {
+func NewAccountVM(events events.IEvent, account *model.EmailAccount) *accountVM {
 	return &accountVM{
-		account:       &model.EmailAccount{},
+		account:       account,
 		events:        events,
 		selectedEmail: nil,
 	}
-}
-
-func (self *accountVM) SetAccount(account *model.EmailAccount) {
-	self.account = account
 }
 
 func (self *accountVM) GetAccount() *model.EmailAccount {
