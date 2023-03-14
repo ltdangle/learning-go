@@ -16,11 +16,6 @@ type accounts struct {
 	event     events.IEvent
 }
 
-const (
-	ACCOUNTS_CURSOR_DOWN_EVENT = "accounts_cursor_down"
-	ACCOUNTS_CURSOR_UP_EVENT   = "accounts_cursor_up"
-)
-
 func newAccounts(event events.IEvent, viewModel *vm.ViewModel) *accounts {
 	return &accounts{
 		viewModel: viewModel,
@@ -86,7 +81,7 @@ func (self *accounts) cursorDown(g *gocui.Gui, v *gocui.View) error {
 		selectedText, _ := v.Line(selectedItem)
 		self.log("Selected text: " + selectedText)
 
-		self.event.Fire(ACCOUNTS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
+		self.viewModel.SelectAccount(selectedItem)
 	}
 	return nil
 }
@@ -107,7 +102,7 @@ func (self *accounts) cursorUp(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		self.event.Fire(ACCOUNTS_CURSOR_UP_EVENT, map[string]any{"selectedItem": selectedItem})
+		self.viewModel.SelectAccount(selectedItem)
 	}
 	return nil
 }

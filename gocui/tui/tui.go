@@ -66,7 +66,6 @@ func Init(e events.IEvent, vm *vm.ViewModel, logger logger.ILogger) {
 	T.preview = newPreview(vm.GetSelectedtAccount().GetSelectedEmail())
 	T.bottom = newBottom()
 
-	AccountEventListeners(vm)
 	EmailEventListeners(T, vm, logger)
 
 	g.SetManagerFunc(layout)
