@@ -40,7 +40,14 @@ func (self *AccountVM) GetSelectedEmail() *model.Email {
 	}
 	return self.selectedEmail
 }
-
+func (self *AccountVM) GetSelectedEmailIndex() int {
+	for i := range self.GetAccount().Emails {
+		if &self.GetAccount().Emails[i] == self.selectedEmail {
+			return i
+		}
+	}
+	return -1
+}
 func (self *AccountVM) GetEmailsAsList() []string {
 	var emails []string
 

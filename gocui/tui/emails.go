@@ -15,11 +15,6 @@ type emails struct {
 	viewModel *vm.ViewModel
 }
 
-const (
-	EMAILS_CURSOR_DOWN_EVENT = "emails_cursor_down"
-	EMAILS_CURSOR_UP_EVENT   = "emails_cursor_up"
-)
-
 func newEmails(event events.IEvent, viewModel *vm.ViewModel) *emails {
 	return &emails{event: event, viewModel: viewModel}
 
@@ -55,6 +50,8 @@ func (self *emails) populate() {
 	for _, item := range self.viewModel.GetSelectedtAccount().GetEmailsAsList() {
 		fmt.Fprintln(self.view, item)
 	}
+	// update cursor position to selected (item) email
+	self.view.SetCursor(0, self.viewModel.GetSelectedtAccount().GetSelectedEmailIndex())
 }
 
 func (self *emails) cursorDown(g *gocui.Gui, v *gocui.View) error {
@@ -74,8 +71,7 @@ func (self *emails) cursorDown(g *gocui.Gui, v *gocui.View) error {
 			}
 		}
 
-		tuiLog("Cursor down: " + strconv.Itoa(cy))
-		self.event.Fire(EMAILS_CURSOR_DOWN_EVENT, map[string]any{"selectedItem": selectedItem})
+		self.viewModel.GetSelectedtAccount().SelectEmail(selectedItem)
 	}
 	return nil
 }
@@ -96,8 +92,7 @@ func (self *emails) cursorUp(g *gocui.Gui, v *gocui.View) error {
 			return nil
 		}
 
-		tuiLog("Cursor up: " + strconv.Itoa(cy))
-		self.event.Fire(EMAILS_CURSOR_UP_EVENT, map[string]any{"selectedItem": selectedItem})
+		self.viewModel.GetSelectedtAccount().SelectEmail(selectedItem)
 	}
 	return nil
 }

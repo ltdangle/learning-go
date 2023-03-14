@@ -86,10 +86,6 @@ func Init(e events.IEvent, vm *vm.ViewModel, logger logger.ILogger) {
 	}
 }
 
-func (self *Tui) populateEmails() {
-	self.emails.populate()
-}
-
 func tuiLog(message string) {
 	logV, _ := T.gui.View(BOTTOM_VIEW)
 	logV.Clear()
