@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/jroimartin/gocui"
 	"learngocui/tui/events"
+	"learngocui/tui/logger"
 	"learngocui/tui/vm"
 	"log"
 )
@@ -47,7 +48,7 @@ type Tui struct {
 
 var T = &Tui{}
 
-func Init(e events.IEvent, vm *vm.ViewModel) {
+func Init(e events.IEvent, vm *vm.ViewModel, logger logger.ILogger) {
 
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
@@ -66,6 +67,7 @@ func Init(e events.IEvent, vm *vm.ViewModel) {
 	T.bottom = newBottom()
 
 	AccountEventListeners(vm)
+	EmailEventListeners(T, vm, logger)
 
 	g.SetManagerFunc(layout)
 
