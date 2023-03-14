@@ -4,6 +4,7 @@ import (
 	"learngocui/model"
 	"learngocui/tui"
 	"learngocui/tui/events"
+	"learngocui/tui/logger"
 	"learngocui/tui/vm"
 )
 
@@ -16,7 +17,7 @@ func main() {
 	accVm3 := vm.NewAccountVM(e, &seed[2])
 	accVm4 := vm.NewAccountVM(e, &seed[3])
 
-	viewModel := vm.NewVM(e, []*vm.AccountVM{accVm1, accVm2, accVm3, accVm4})
+	viewModel := vm.NewVM(e, []*vm.AccountVM{accVm1, accVm2, accVm3, accVm4}, logger.NewLogger())
 	//viewModel.AddAccount(accVm1)
 	//viewModel.AddAccount(accVm2)
 	//viewModel.AddAccount(accVm3)

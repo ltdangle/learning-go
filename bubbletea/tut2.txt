@@ -4,24 +4,8 @@ import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
 	"net/http"
-	"os"
 	"time"
 )
-
-//func main() {
-//	p := tea.NewProgram(initialModel())
-//	if _, err := p.Run(); err != nil {
-//		fmt.Printf("Alas, there's been an error: %v", err)
-//		os.Exit(1)
-//	}
-//}
-
-func main() {
-	if _, err := tea.NewProgram(model{}).Run(); err != nil {
-		fmt.Printf("Uh oh, there was an error: %v\n", err)
-		os.Exit(1)
-	}
-}
 
 const url = "https://charm.sh/"
 

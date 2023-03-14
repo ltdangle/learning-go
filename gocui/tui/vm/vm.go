@@ -2,6 +2,8 @@ package vm
 
 import (
 	"learngocui/tui/events"
+	"learngocui/tui/logger"
+	"strconv"
 )
 
 const (
@@ -13,12 +15,14 @@ type ViewModel struct {
 	accounts        []*AccountVM
 	selectedAccount *AccountVM
 	events          events.IEvent
+	logger          logger.ILogger
 }
 
-func NewVM(events events.IEvent, accounts []*AccountVM) *ViewModel {
+func NewVM(events events.IEvent, accounts []*AccountVM, logger logger.ILogger) *ViewModel {
 	self := &ViewModel{
 		accounts: accounts,
 		events:   events,
+		logger:   logger,
 	}
 
 	// select account and email by default
@@ -39,6 +43,7 @@ func (self *ViewModel) GetSelectedtAccount() *AccountVM {
 func (self *ViewModel) SelectAccount(index int) *AccountVM {
 	self.selectedAccount = self.accounts[index]
 	self.events.Fire(ACCOUNT_SELECTED, map[string]any{"selectedAccount": self.selectedAccount})
+	self.logger.Log("vm: selected account index " + strconv.Itoa(index))
 	return self.selectedAccount
 }
 
