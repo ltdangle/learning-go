@@ -8,9 +8,9 @@ import (
 
 func EmailEventListeners(t *Tui, viewModel *vm.ViewModel, logger logger.ILogger) {
 	event.On(vm.ACCOUNT_SELECTED, event.ListenerFunc(func(e event.Event) error {
-		logger.Log("email event listener: update emails with ")
+		logger.Log("vm.ACCOUNT_SELECTED: update emails with ")
 		logger.Log(viewModel.GetSelectedtAccount().GetEmailsAsList())
-		t.populateEmails(viewModel.GetSelectedtAccount().GetEmailsAsList())
+		t.populateEmails()
 		return nil
 	}), event.Normal)
 }

@@ -4,15 +4,16 @@ import (
 	"fmt"
 	"github.com/jroimartin/gocui"
 	"learngocui/tui/events"
+	"learngocui/tui/vm"
 	"strconv"
 )
 
 // accounts email accounts view
 type accounts struct {
 	// items to be displayed
-	items []string
-	view  *gocui.View
-	event events.IEvent
+	viewModel *vm.ViewModel
+	view      *gocui.View
+	event     events.IEvent
 }
 
 const (
@@ -20,10 +21,10 @@ const (
 	ACCOUNTS_CURSOR_UP_EVENT   = "accounts_cursor_up"
 )
 
-func newAccountsV(event events.IEvent, items []string) *accounts {
+func newAccounts(event events.IEvent, viewModel *vm.ViewModel) *accounts {
 	return &accounts{
-		items: items,
-		event: event,
+		viewModel: viewModel,
+		event:     event,
 	}
 }
 
@@ -59,7 +60,7 @@ func (self *accounts) initView(gui *gocui.Gui, startX, startY, endX, endY int) e
 
 func (self *accounts) populate() {
 	self.view.Clear()
-	for _, item := range self.items {
+	for _, item := range self.viewModel.GetAccountNames() {
 		fmt.Fprintln(self.view, item)
 	}
 }
@@ -70,7 +71,7 @@ func (self *accounts) cursorDown(g *gocui.Gui, v *gocui.View) error {
 		selectedItem := cy + 1
 
 		// we've reached the end of the list
-		if selectedItem == len(self.items) {
+		if selectedItem == len(self.viewModel.GetAccountNames()) {
 			return nil
 		}
 

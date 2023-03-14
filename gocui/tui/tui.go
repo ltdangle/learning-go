@@ -61,8 +61,8 @@ func Init(e events.IEvent, vm *vm.ViewModel, logger logger.ILogger) {
 	g.Cursor = true
 	g.SelFgColor = gocui.ColorMagenta
 
-	T.accounts = newAccountsV(e, vm.GetAccountNames())
-	T.emails = newEmails(e, vm.GetSelectedtAccount().GetEmailsAsList())
+	T.accounts = newAccounts(e, vm)
+	T.emails = newEmails(e, vm)
 	T.preview = newPreview(vm.GetSelectedtAccount().GetSelectedEmail())
 	T.bottom = newBottom()
 
@@ -86,8 +86,7 @@ func Init(e events.IEvent, vm *vm.ViewModel, logger logger.ILogger) {
 	}
 }
 
-func (self *Tui) populateEmails(items []string) {
-	self.emails.items = items
+func (self *Tui) populateEmails() {
 	self.emails.populate()
 }
 
