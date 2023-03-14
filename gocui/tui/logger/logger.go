@@ -14,8 +14,8 @@ type logger struct {
 	filename string
 }
 
-func NewLogger() ILogger {
-	l := &logger{filename: "log.txt"}
+func NewLogger(filename string) ILogger {
+	l := &logger{filename: filename}
 	l.emptyLog()
 
 	return l
