@@ -3,17 +3,17 @@ package tui
 import (
 	"fmt"
 	"github.com/jroimartin/gocui"
-	"learngocui/model"
+	"learngocui/tui/vm"
 	"strconv"
 )
 
 type preview struct {
-	view  *gocui.View
-	email *model.Email
+	view      *gocui.View
+	viewModel *vm.ViewModel
 }
 
-func newPreview(email *model.Email) *preview {
-	return &preview{email: email}
+func newPreview(viewModel *vm.ViewModel) *preview {
+	return &preview{viewModel: viewModel}
 }
 
 func (self *preview) initView(gui *gocui.Gui, startX, startY, endX, endY int) error {
@@ -34,19 +34,20 @@ func (self *preview) initView(gui *gocui.Gui, startX, startY, endX, endY int) er
 	return nil
 }
 func (self *preview) populate() {
+	selectedEmail := self.viewModel.GetSelectedtAccount().GetSelectedEmail()
 	if self.view == nil {
 		return
 	}
-	if self.email == nil {
+	if selectedEmail == nil {
 		return
 	}
 
 	self.view.Clear()
 
-	fmt.Fprintln(self.view, "Date: "+self.email.Date)
-	fmt.Fprintln(self.view, "From: "+self.email.From)
-	fmt.Fprintln(self.view, "To: "+self.email.To)
-	fmt.Fprintln(self.view, "Subject: "+self.email.Subject)
+	fmt.Fprintln(self.view, "Date: "+selectedEmail.Date)
+	fmt.Fprintln(self.view, "From: "+selectedEmail.From)
+	fmt.Fprintln(self.view, "To: "+selectedEmail.To)
+	fmt.Fprintln(self.view, "Subject: "+selectedEmail.Subject)
 	fmt.Fprintln(self.view, "")
-	fmt.Fprintln(self.view, self.email.Text)
+	fmt.Fprintln(self.view, selectedEmail.Text)
 }
