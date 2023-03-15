@@ -19,10 +19,6 @@ func main() {
 
 	logger := logger.NewLogger("log.txt")
 	viewModel := vm.NewVM(e, []*vm.AccountVM{accVm1, accVm2, accVm3, accVm4}, logger)
-	//viewModel.AddAccount(accVm1)
-	//viewModel.AddAccount(accVm2)
-	//viewModel.AddAccount(accVm3)
-	//viewModel.AddAccount(accVm4)
 
 	tui.Init(e, viewModel, logger)
 }
