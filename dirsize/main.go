@@ -10,19 +10,41 @@ import (
 // To use the program, compile it and run it with the -dir and -unit flags, like this:
 // $ go build dirsize.go
 // $ ./dirsize -dir /path/to/directory -unit MB
+
 func getDirSize(path string) (int64, error) {
 	var size int64
-	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+	var fileCounter int
+
+	err := filepath.Walk(path, func(currentPath string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if !info.IsDir() {
-			size += info.Size()
+			fileSize := info.Size()
+			fileCounter++
+			fmt.Printf("File %d: %s - Size: %d bytes\n", fileCounter, currentPath, fileSize)
+			size += fileSize
 		}
 		return nil
 	})
 	return size, err
 }
+
+// func getDirSize(path string) (int64, error) {
+// 	var size int64
+// 	err := filepath.Walk(path, func(currentPath string, info os.FileInfo, err error) error {
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if !info.IsDir() {
+// 			fileSize := info.Size()
+// 			fmt.Printf("File: %s - Size: %d bytes\n", currentPath, fileSize)
+// 			size += fileSize
+// 		}
+// 		return nil
+// 	})
+// 	return size, err
+// }
 
 func formatSize(size int64, unit string) string {
 	switch unit {
