@@ -21,7 +21,7 @@ type Page struct {
 	Links map[string]HostLinks
 }
 
-func scrapeLinksFromUrl(urlStr string) Page {
+func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
