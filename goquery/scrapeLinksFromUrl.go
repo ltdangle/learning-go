@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 type PageLink struct {
@@ -22,6 +24,7 @@ type Page struct {
 }
 
 func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
+	fmt.Println("Scraping " + urlStr)
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
@@ -56,6 +59,10 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 
 		if urlObj.Path == "" {
 			urlObj.Path = "/"
+		}
+
+		if !strings.HasPrefix(urlObj.Path, "/") {
+			urlObj.Path = "/" + urlObj.Path
 		}
 
 		// Check if the nested map has been initialized.

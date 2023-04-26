@@ -2,7 +2,7 @@ package main
 
 // SiteMap data structure
 type SiteMap struct {
-	Links []SiteLink
+	Links []*SiteLink
 }
 
 type SiteLink struct {
@@ -16,12 +16,14 @@ type LinkStatus struct {
 
 // SiteMapper object.
 type SiteMapper struct {
+	Scheme  string
 	Host    string
 	SiteMap *SiteMap
 }
 
-func NewSiteMapper(host string) *SiteMapper {
+func NewSiteMapper(scheme string, host string) *SiteMapper {
 	return &SiteMapper{
+		Scheme:  scheme,
 		Host:    host,
 		SiteMap: &SiteMap{},
 	}
@@ -32,7 +34,7 @@ func (m *SiteMapper) addPathToSiteMap(host string, path string) {
 		return
 	} else {
 		if m.pathExists(path) == false {
-			m.SiteMap.Links = append(m.SiteMap.Links, SiteLink{Path: path, Status: LinkStatus{Visited: false}})
+			m.SiteMap.Links = append(m.SiteMap.Links, &SiteLink{Path: path, Status: LinkStatus{Visited: false}})
 		}
 	}
 }
@@ -43,6 +45,24 @@ func (m *SiteMapper) pathExists(path string) bool {
 		}
 	}
 	return false
+}
+
+func (m *SiteMapper) uncrawledLinksRemain() bool {
+	for _, link := range m.SiteMap.Links {
+		if link.Status.Visited == false {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *SiteMapper) nextUncrawledLink() *SiteLink {
+	for _, link := range m.SiteMap.Links {
+		if link.Status.Visited == false {
+			return link
+		}
+	}
+	return nil
 }
 
 // TODO: move to SiteMapper.
@@ -58,8 +78,8 @@ func extractPageLinksToSitemap(siteMap *SiteMap, page Page, host string) {
 	if hostLinks == nil {
 		return
 	}
-	for url, _ := range hostLinks.Urls {
-		siteMap.Links = append(siteMap.Links, SiteLink{Path: url, Status: LinkStatus{Visited: false}})
+	for url := range hostLinks.Urls {
+		siteMap.Links = append(siteMap.Links, &SiteLink{Path: url, Status: LinkStatus{Visited: false}})
 
 	}
 }
