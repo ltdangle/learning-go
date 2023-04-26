@@ -7,9 +7,10 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 )
 
-func ExampleScrape(urlStr string) {
+func scrapeLinks(urlStr string) {
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
@@ -60,5 +61,5 @@ func ExampleScrape(urlStr string) {
 }
 
 func main() {
-	ExampleScrape("https://tailoredessays.com")
+	scrapeLinks(os.Args[1])
 }
