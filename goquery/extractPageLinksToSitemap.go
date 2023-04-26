@@ -13,9 +13,9 @@ type LinkStatus struct {
 	Visited bool
 }
 
-func extractPageLinksToSitemap(p Page, host string) SiteMap {
+func extractPageLinksToSitemap(siteMap *SiteMap, page Page, host string) {
 	var hostLinks *HostLinks
-	for _, value := range p.Links {
+	for _, value := range page.Links {
 		if value.Host == host {
 			hostLinks = &value
 			break
@@ -23,12 +23,10 @@ func extractPageLinksToSitemap(p Page, host string) SiteMap {
 	}
 	// Host links not found, return empty value.
 	if hostLinks == nil {
-		return SiteMap{}
+		return
 	}
-	var sitemap = SiteMap{}
 	for url, _ := range hostLinks.Urls {
-		sitemap.Links = append(sitemap.Links, SiteLink{Url: url, Status: LinkStatus{Visited: false}})
+		siteMap.Links = append(siteMap.Links, SiteLink{Url: url, Status: LinkStatus{Visited: false}})
 
 	}
-	return sitemap
 }
