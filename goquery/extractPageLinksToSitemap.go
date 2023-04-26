@@ -27,9 +27,6 @@ func extractPageLinksToSitemap(p Page, host string) SiteMap {
 	}
 	var sitemap = SiteMap{}
 	for url, _ := range hostLinks.Urls {
-		if url == "" {
-			url = "/"
-		}
 		sitemap.Links = append(sitemap.Links, SiteLink{Url: url, Status: LinkStatus{Visited: false}})
 
 	}
