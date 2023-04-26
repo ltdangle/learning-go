@@ -10,11 +10,21 @@ import (
 	"os"
 )
 
-func scrapeLinks(urlStr string) {
+type Link struct {
+	Count   int  `json:"count"`
+	Visited bool `json:"visited"`
+}
+
+type HostLinks struct {
+	Host string           `json:"domain"`
+	URLs map[string]*Link `json:"urls"`
+}
+
+func scrapeLinksFromUrl(urlStr string) {
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
-	links := make(map[string]map[string]int)
+	var pageLinks []*HostLinks
 
 	// Request the HTML page.
 	res, err := http.Get(urlStr)
@@ -36,7 +46,6 @@ func scrapeLinks(urlStr string) {
 	doc.Find("a").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the linkHref.
 		linkHref, _ := s.Attr("href")
-		//fmt.Printf("Link href %d: %s\n", i, linkHref)
 		urlObj, _ := url.Parse(linkHref)
 
 		// For relative links, set host to pageHost
@@ -44,22 +53,37 @@ func scrapeLinks(urlStr string) {
 			urlObj.Host = pageHost
 		}
 
-		// Check if the nested map for the key "one" has been initialized.
-		if links[urlObj.Host] == nil {
-			// Initialize the nested map for the key "one".
-			links[urlObj.Host] = make(map[string]int)
+		hostLinkMap := findHostLinks(pageLinks, urlObj.Host)
+		if hostLinkMap == nil {
+			hostLinkMap = &HostLinks{
+				Host: urlObj.Host,
+				URLs: make(map[string]*Link),
+			}
+			pageLinks = append(pageLinks, hostLinkMap)
 		}
 
-		// Update links map.
-		links[urlObj.Host][urlObj.Path]++
+		link, ok := hostLinkMap.URLs[urlObj.Path]
+		if !ok {
+			link = &Link{Count: 0, Visited: false}
+			hostLinkMap.URLs[urlObj.Path] = link
+		}
+		link.Count++
 	})
 
 	// Pretty print our found links.
-	s, _ := json.MarshalIndent(links, "", "\t")
+	s, _ := json.MarshalIndent(pageLinks, "", "\t")
 	fmt.Print(string(s))
+}
 
+func findHostLinks(hostLinks []*HostLinks, domain string) *HostLinks {
+	for _, linkMap := range hostLinks {
+		if linkMap.Host == domain {
+			return linkMap
+		}
+	}
+	return nil
 }
 
 func main() {
-	scrapeLinks(os.Args[1])
+	scrapeLinksFromUrl(os.Args[1])
 }
