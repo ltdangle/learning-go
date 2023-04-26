@@ -6,7 +6,7 @@ type SiteMap struct {
 }
 
 type SiteLink struct {
-	Url    string
+	Path   string
 	Status LinkStatus
 }
 
@@ -27,13 +27,11 @@ func NewSiteMapper(host string) *SiteMapper {
 	}
 }
 
-func (m *SiteMapper) addLinkToSiteMap(url string, siteMap *SiteMap) {
-	for _, siteLink := range siteMap.Links {
-		if siteLink.Url == url {
-			return
-		} else {
-			siteMap.Links = append(siteMap.Links, SiteLink{Url: url, Status: LinkStatus{Visited: false}})
-		}
+func (m *SiteMapper) addLinkToSiteMap(host string, path string) {
+	if m.Host != host {
+		return
+	} else {
+		m.SiteMap.Links = append(m.SiteMap.Links, SiteLink{Path: path, Status: LinkStatus{Visited: false}})
 	}
 }
 
@@ -51,7 +49,7 @@ func extractPageLinksToSitemap(siteMap *SiteMap, page Page, host string) {
 		return
 	}
 	for url, _ := range hostLinks.Urls {
-		siteMap.Links = append(siteMap.Links, SiteLink{Url: url, Status: LinkStatus{Visited: false}})
+		siteMap.Links = append(siteMap.Links, SiteLink{Path: url, Status: LinkStatus{Visited: false}})
 
 	}
 }
