@@ -27,12 +27,22 @@ func NewSiteMapper(host string) *SiteMapper {
 	}
 }
 
-func (m *SiteMapper) addLinkToSiteMap(host string, path string) {
+func (m *SiteMapper) addPathToSiteMap(host string, path string) {
 	if m.Host != host {
 		return
 	} else {
-		m.SiteMap.Links = append(m.SiteMap.Links, SiteLink{Path: path, Status: LinkStatus{Visited: false}})
+		if m.pathExists(path) == false {
+			m.SiteMap.Links = append(m.SiteMap.Links, SiteLink{Path: path, Status: LinkStatus{Visited: false}})
+		}
 	}
+}
+func (m *SiteMapper) pathExists(path string) bool {
+	for _, v := range m.SiteMap.Links {
+		if v.Path == path {
+			return true
+		}
+	}
+	return false
 }
 
 // TODO: move to SiteMapper.

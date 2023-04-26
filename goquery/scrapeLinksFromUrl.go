@@ -54,9 +54,13 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 			urlObj.Host = pageHost
 		}
 
-		// Check if the nested map for the key "one" has been initialized.
+		if urlObj.Path == "" {
+			urlObj.Path = "/"
+		}
+
+		// Check if the nested map has been initialized.
 		if pageLinks[urlObj.Host].Urls == nil {
-			// Initialize the nested map for the key "one".
+			// Initialize the nested map.
 			pageLinks[urlObj.Host] = HostLinks{
 				Host: urlObj.Host,
 				Urls: make(map[string]PageLink),
@@ -67,6 +71,12 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 		link := pageLinks[urlObj.Host].Urls[urlObj.Path]
 		link.Count++
 		pageLinks[urlObj.Host].Urls[urlObj.Path] = link
+
+		// Update site map.
+		if urlObj.Host == siteMapper.Host {
+			siteMapper.addPathToSiteMap(urlObj.Host, urlObj.Path)
+		}
+
 	})
 
 	// Create a Page struct with the pageLinks

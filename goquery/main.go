@@ -20,9 +20,6 @@ func main() {
 	fmt.Println("Page links")
 	fmt.Print(string(p1))
 
-	// Extract sitemap.
-	extractPageLinksToSitemap(siteMapper.SiteMap, page, host)
-
 	// Pretty print sitemap.
 	p2, _ := json.MarshalIndent(siteMapper, "", "\t")
 	fmt.Println("")
