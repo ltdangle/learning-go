@@ -15,16 +15,20 @@ type Link struct {
 	Visited bool `json:"visited"`
 }
 
-type HostLinks struct {
-	Host string           `json:"domain"`
-	URLs map[string]*Link `json:"urls"`
+type DomainMap struct {
+	Domain string          `json:"domain"`
+	URLs   map[string]Link `json:"urls"`
 }
 
-func scrapeLinksFromUrl(urlStr string) {
+type Page struct {
+	Links map[string]DomainMap
+}
+
+func scrapeLinksFromUrl(urlStr string) Page {
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
-	var pageLinks []*HostLinks
+	pageLinks := make(map[string]DomainMap)
 
 	// Request the HTML page.
 	res, err := http.Get(urlStr)
@@ -53,37 +57,33 @@ func scrapeLinksFromUrl(urlStr string) {
 			urlObj.Host = pageHost
 		}
 
-		hostLinkMap := findHostLinks(pageLinks, urlObj.Host)
-		if hostLinkMap == nil {
-			hostLinkMap = &HostLinks{
-				Host: urlObj.Host,
-				URLs: make(map[string]*Link),
+		// Check if the nested map for the key "one" has been initialized.
+		if pageLinks[urlObj.Host].URLs == nil {
+			// Initialize the nested map for the key "one".
+			pageLinks[urlObj.Host] = DomainMap{
+				Domain: urlObj.Host,
+				URLs:   make(map[string]Link),
 			}
-			pageLinks = append(pageLinks, hostLinkMap)
 		}
 
-		link, ok := hostLinkMap.URLs[urlObj.Path]
-		if !ok {
-			link = &Link{Count: 0, Visited: false}
-			hostLinkMap.URLs[urlObj.Path] = link
-		}
+		// Update links map.
+		link := pageLinks[urlObj.Host].URLs[urlObj.Path]
 		link.Count++
+		pageLinks[urlObj.Host].URLs[urlObj.Path] = link
 	})
 
-	// Pretty print our found links.
-	s, _ := json.MarshalIndent(pageLinks, "", "\t")
-	fmt.Print(string(s))
-}
-
-func findHostLinks(hostLinks []*HostLinks, domain string) *HostLinks {
-	for _, linkMap := range hostLinks {
-		if linkMap.Host == domain {
-			return linkMap
-		}
+	// Create a Page struct with the pageLinks
+	page := Page{
+		Links: pageLinks,
 	}
-	return nil
+
+	return page
 }
 
 func main() {
-	scrapeLinksFromUrl(os.Args[1])
+	page := scrapeLinksFromUrl(os.Args[1])
+
+	// Pretty print the Page struct
+	s, _ := json.MarshalIndent(page, "", "\t")
+	fmt.Print(string(s))
 }
