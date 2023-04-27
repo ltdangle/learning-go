@@ -65,7 +65,7 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 			urlObj.Path = "/" + urlObj.Path
 		}
 
-		// Check if the nested map has been initialized.
+		// Update page link.
 		if pageLinks[urlObj.Host].Urls == nil {
 			// Initialize the nested map.
 			pageLinks[urlObj.Host] = HostLinks{

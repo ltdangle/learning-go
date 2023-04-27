@@ -14,14 +14,10 @@ func main() {
 	scheme := parsedUrlStr.Scheme
 	siteMapper := NewSiteMapper(scheme, host)
 
-	page := scrapeLinksFromUrl(siteMapper, urlStr)
+	// Scrape start page.
+	scrapeLinksFromUrl(siteMapper, urlStr)
 
-	// Pretty print the Page struct
-	p1, _ := json.MarshalIndent(page, "", "\t")
-	fmt.Println("Page links")
-	fmt.Print(string(p1))
-
-	// Crawl site
+	// Crawl site.
 	for {
 		if siteMapper.uncrawledLinksRemain() {
 			link := siteMapper.nextUncrawledLink()
