@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"github.com/PuerkitoBio/goquery"
-	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -23,8 +23,8 @@ type Page struct {
 	Links map[string]HostLinks
 }
 
-func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
-	fmt.Println("Scraping " + urlStr)
+func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) error {
+
 	parsedUrlStr, _ := url.Parse(urlStr)
 	pageHost := parsedUrlStr.Host
 
@@ -33,17 +33,18 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 	// Request the HTML page.
 	res, err := http.Get(urlStr)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer res.Body.Close()
+
 	if res.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
+		return errors.New(strconv.Itoa(res.StatusCode) + " - " + res.Status)
 	}
 
 	// Load the HTML document
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// Find all links
@@ -65,9 +66,8 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 			urlObj.Path = "/" + urlObj.Path
 		}
 
-		// Update page link.
+		// Update page links.
 		if pageLinks[urlObj.Host].Urls == nil {
-			// Initialize the nested map.
 			pageLinks[urlObj.Host] = HostLinks{
 				Host: urlObj.Host,
 				Urls: make(map[string]PageLink),
@@ -86,10 +86,5 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) Page {
 
 	})
 
-	// Create a Page struct with the pageLinks
-	page := Page{
-		Links: pageLinks,
-	}
-
-	return page
+	return nil
 }

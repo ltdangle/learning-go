@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"os"
 )
@@ -15,14 +16,21 @@ func main() {
 	siteMapper := NewSiteMapper(scheme, host)
 
 	// Scrape start page.
-	scrapeLinksFromUrl(siteMapper, urlStr)
+	err := scrapeLinksFromUrl(siteMapper, urlStr)
+	if err != nil {
+		log.Fatal("Could not scrape " + urlStr)
+	}
 
 	// Crawl site.
 	for {
 		if siteMapper.uncrawledLinksRemain() {
 			link := siteMapper.nextUncrawledLink()
 			linkUrl := siteMapper.Scheme + "://" + siteMapper.Host + link.Path
-			scrapeLinksFromUrl(siteMapper, linkUrl)
+			fmt.Println("Scraping " + linkUrl)
+			err := scrapeLinksFromUrl(siteMapper, linkUrl)
+			if err != nil {
+				fmt.Println("Could not scrape " + linkUrl)
+			}
 			link.Status.Visited = true
 		} else {
 			break
