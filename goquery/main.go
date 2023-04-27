@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net/url"
-	"os"
 )
 
 func main() {
-	urlStr := os.Args[1]
+	//urlStr := os.Args[1]
+	urlStr := "https://www.essayclip.com/"
 	parsedUrlStr, _ := url.Parse(urlStr)
 	host := parsedUrlStr.Host
 	scheme := parsedUrlStr.Scheme
@@ -29,7 +29,7 @@ func main() {
 			fmt.Println("Scraping " + linkUrl)
 			err := scrapeLinksFromUrl(siteMapper, linkUrl)
 			if err != nil {
-				fmt.Println("Could not scrape " + linkUrl)
+				fmt.Println("Could not scrape " + linkUrl + ": " + err.Error())
 			}
 			link.Status.Visited = true
 		} else {

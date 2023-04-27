@@ -64,22 +64,3 @@ func (m *SiteMapper) nextUncrawledLink() *SiteLink {
 	}
 	return nil
 }
-
-// TODO: move to SiteMapper.
-func extractPageLinksToSitemap(siteMap *SiteMap, page Page, host string) {
-	var hostLinks *HostLinks
-	for _, value := range page.Links {
-		if value.Host == host {
-			hostLinks = &value
-			break
-		}
-	}
-	// Host links not found, return empty value.
-	if hostLinks == nil {
-		return
-	}
-	for url := range hostLinks.Urls {
-		siteMap.Links = append(siteMap.Links, &SiteLink{Path: url, Status: LinkStatus{Visited: false}})
-
-	}
-}

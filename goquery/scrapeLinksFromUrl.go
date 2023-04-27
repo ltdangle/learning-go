@@ -2,9 +2,14 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -41,13 +46,12 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) error {
 		return errors.New(strconv.Itoa(res.StatusCode) + " - " + res.Status)
 	}
 
-	// Load the HTML document
+	// Find all links
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return err
 	}
 
-	// Find all links
 	doc.Find("a").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the linkHref.
 		linkHref, _ := s.Attr("href")
@@ -86,5 +90,47 @@ func scrapeLinksFromUrl(siteMapper *SiteMapper, urlStr string) error {
 
 	})
 
+	// Save page html.
+	html, _ := doc.Html()
+	err = saveHtmlToFile(pageHost, parsedUrlStr.Path, html)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func saveHtmlToFile(host string, path string, html string) error {
+	if path == "" || path == "/" {
+		path = "/index"
+	}
+	if path[len(path)-1] == '/' {
+		path += "/index"
+	}
+
+	filePath := "/tmp/" + host + path
+
+	// Create the directory along with any necessary parents.
+	dir := filepath.Dir(filePath)
+	if _, err := os.Stat(filePath); !os.IsNotExist(err) {
+		// File exists
+		err = os.RemoveAll(filePath)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		return err
+	}
+
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
+
+	// Write the html to the file.
+	err = ioutil.WriteFile(filePath, []byte(html), 0644)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Saved to " + filePath)
 	return nil
 }
