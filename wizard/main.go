@@ -22,18 +22,23 @@ func DefaultStyles() *Styles {
 
 type model struct {
 	index       int
-	questions   []string
+	questions   []Question
 	width       int
 	height      int
 	answerField textinput.Model
 	styles      *Styles
 }
+type Question struct {
+	question string
+	answer   string
+}
 
-func New(questions []string) *model {
+func New(questions []Question) *model {
 	styles := DefaultStyles()
 	answerField := textinput.New()
 	answerField.Placeholder = "Your answer here"
 	answerField.Focus()
+
 	return &model{
 		questions:   questions,
 		answerField: answerField,
@@ -47,7 +52,7 @@ func (m model) Init() tea.Cmd {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-
+	current := &m.questions[m.index]
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
@@ -57,8 +62,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c":
 			return m, tea.Quit
 		case "enter":
-			m.index++
-			m.answerField.SetValue("done!")
+			current.answer = m.answerField.Value()
+			m.answerField.SetValue("")
+			m.Next()
 			return m, nil
 		}
 	}
@@ -79,14 +85,27 @@ func (m model) View() string {
 		lipgloss.Center,
 		lipgloss.JoinVertical(
 			lipgloss.Left,
-			m.questions[m.index],
+			m.questions[m.index].question,
 			m.styles.InputField.Render(m.answerField.View()),
 		))
 	// return m.questions[m.index] + m.answerField.View()
 }
-
+func (m *model) Next() {
+	if m.index < len(m.questions)-1 {
+		m.index++
+	} else {
+		m.index = 0
+	}
+}
+func NewQuestion(question string) Question {
+	return Question{question: question}
+}
 func main() {
-	questions := []string{"what is your name?", "what is your favorite editor?", "what is your favorite quote?"}
+	questions := []Question{
+		NewQuestion("what is your name?"),
+		NewQuestion("what is your favorite editor?"),
+		NewQuestion("what is your favorite quote?"),
+	}
 	m := New(questions)
 
 	f, err := tea.LogToFile("debug.log", "debug")
