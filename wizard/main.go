@@ -64,6 +64,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			current.answer = m.answerField.Value()
 			m.answerField.SetValue("")
+			log.Printf("question: %s, answer: %s", current.question, current.answer)
 			m.Next()
 			return m, nil
 		}
