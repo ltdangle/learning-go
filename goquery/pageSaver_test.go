@@ -14,12 +14,16 @@ func TestNewPageSaver(t *testing.T) {
 		{"Homepage", "https://domain.com", "/tmp/domain.com/index"},
 		{"Homepage with slash", "https://domain.com/", "/tmp/domain.com/index"},
 		{"1st level page", "https://domain.com/page1", "/tmp/domain.com/page1"},
-		{"1st level page with slash", "https://domain.com/page1/", "/tmp/domain.com/page1/index"},
+		{"1st level page with /", "https://domain.com/page1/", "/tmp/domain.com/page1/index"},
 		{"2nd level page", "https://domain.com/page1/page2", "/tmp/domain.com/page1/page2"},
-		{"2nd level page with slash", "https://domain.com/page1/page2/", "/tmp/domain.com/page1/page2/index"},
+		{"2nd level page with /", "https://domain.com/page1/page2/", "/tmp/domain.com/page1/page2/index"},
+		{"2nd level inner page", "https://domain.com/page1/page2/somepage", "/tmp/domain.com/page1/page2/somepage"},
+		{"2nd level inner page", "https://domain.com/page1/page2/otherpage", "/tmp/domain.com/page1/page2/otherpage"},
+		{"3d level page", "https://domain.com/page1/page2/page3", "/tmp/domain.com/page1/page2/page3"},
+		{"3d level page with /", "https://domain.com/page1/page2/page3/", "/tmp/domain.com/page1/page2/page3/index"},
 	}
 
-	saver := NewPageSaver(&FileSystemStub{}, "/tmp")
+	saver := NewPageSaver(NewFileSystem(), "/tmp/")
 	// Iterate through the test cases.
 	for _, tt := range testCases {
 		t.Run(tt.name, func(t *testing.T) {
@@ -29,22 +33,4 @@ func TestNewPageSaver(t *testing.T) {
 			}
 		})
 	}
-}
-
-type FileSystemStub struct{}
-
-func (FileSystemStub) Save(path string, content string) error {
-	return nil
-}
-
-func (FileSystemStub) Exists(path string) {
-	return
-}
-
-func (FileSystemStub) IsDir(path string) {
-	return
-}
-
-func (FileSystemStub) IsFile(path string) {
-	return
 }

@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/url"
+	"os"
 )
 
 func main() {
-	//urlStr := os.Args[1]
-	urlStr := "https://www.essayclip.com/"
+	urlStr := os.Args[1]
+	//urlStr := "https://www.essayclip.com/"
 	parsedUrlStr, _ := url.Parse(urlStr)
 	host := parsedUrlStr.Host
 	scheme := parsedUrlStr.Scheme
