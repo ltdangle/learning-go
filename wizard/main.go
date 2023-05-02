@@ -63,12 +63,18 @@ func (m model) View() string {
 	if m.width == 0 {
 		return "loading.."
 	}
+
+	return lipgloss.Place(
+		m.width,
+		m.height,
+		lipgloss.Center,
+		lipgloss.Center,
+		lipgloss.JoinVertical(
+			lipgloss.Left,
+			m.questions[m.index],
+			m.styles.InputField.Render(m.answerField.View()),
+		))
 	// return m.questions[m.index] + m.answerField.View()
-	return lipgloss.JoinVertical(
-		lipgloss.Left,
-		m.questions[m.index],
-		m.styles.InputField.Render(m.answerField.View()),
-	)
 }
 
 func main() {
