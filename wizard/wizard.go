@@ -21,8 +21,9 @@ func DefaultStyles() *Styles {
 }
 
 type model struct {
-	index       int
-	questions   []Question
+	index     int
+	questions []Question
+	// Screen dimensions.
 	width       int
 	height      int
 	answerField textinput.Model
