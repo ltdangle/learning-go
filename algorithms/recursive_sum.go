@@ -15,13 +15,10 @@ func calc_sum(arr []int) int {
 	// Base case.
 	if len(arr) == 1 {
 		sum += arr[0]
-		fmt.Printf("Sum of %v is %d \n", arr, sum)
 		return sum
 	}
 	// Recursive case.
-	shifted_arr := arr[1:]
-	sum += arr[0] + calc_sum(shifted_arr)
-	fmt.Printf("Sum of %v is %d \n", arr, sum)
+	sum += arr[0] + calc_sum(arr[1:])
 	return sum
 
 }
