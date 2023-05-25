@@ -7,7 +7,7 @@ import (
 func main() {
 	var s []int
 	s = []int{1, 2, 3, 4, 5}
-	fmt.Printf("Sum of %v is %d", s, calc_max(s))
+	fmt.Printf("Sum of %v is %d", s, calc_sum(s))
 
 }
 func calc_sum(arr []int) int {
@@ -18,7 +18,7 @@ func calc_sum(arr []int) int {
 		return sum
 	}
 	// Recursive case.
-	sum += arr[0] + calc_max(arr[1:])
+	sum += arr[0] + calc_sum(arr[1:])
 	return sum
 
 }
