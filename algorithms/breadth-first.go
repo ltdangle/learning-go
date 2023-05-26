@@ -11,13 +11,14 @@ func search(graph Graph) bool {
 	searched := make(map[string]bool)
 	for !q.IsEmpty() {
 		person, _ := q.Dequeue()
-
-		if person_is_seller(person) {
-			fmt.Println("Person %v is a seller!", person)
-			return true
-		} else {
-			q.EnqueFromSlice(graph[person])
-			searched[person] = true
+		if _, exists := searched[person]; !exists {
+			if person_is_seller(person) {
+				fmt.Printf("Person %v is a seller!\n", person)
+				return true
+			} else {
+				q.EnqueFromSlice(graph[person])
+				searched[person] = true
+			}
 		}
 	}
 	return false
