@@ -134,8 +134,8 @@ func (m mainModel) View() string {
 	model := m.currentFocusedModel()
 
 	// Set view column widths
-	modelStyle.Width((m.width / 2) - 2)
-	focusedModelStyle.Width((m.width / 2) - 2)
+	modelStyle.Width((m.width / 2) - 1)
+	focusedModelStyle.Width((m.width / 2) - 1)
 
 	if m.state == timerView {
 		s += lipgloss.JoinHorizontal(lipgloss.Top, focusedModelStyle.Render(fmt.Sprintf("%4s", m.timer.View())), modelStyle.Render(m.spinner.View()))
