@@ -11,12 +11,14 @@ import (
 
 	"github.com/gorilla/websocket"
 )
+type WS struct {
+}
 
 var addr = flag.String("addr", "localhost:8080", "http service address")
 
 var upgrader = websocket.Upgrader{} // use default options
 
-func echo(w http.ResponseWriter, r *http.Request) {
+func (ws *WS) Echo(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
@@ -38,17 +40,21 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (ws *WS) Home(w http.ResponseWriter, r *http.Request) {
 	homeTemplate.Execute(w, "ws://"+r.Host+"/echo")
 	// homeTemplate.Execute(w, "ws://127.0.0.1:1234")
 }
 
-func main() {
+func (ws *WS) Run()  {
 	flag.Parse()
 	log.SetFlags(0)
-	http.HandleFunc("/echo", echo)
-	http.HandleFunc("/", home)
+	http.HandleFunc("/echo", ws.Echo)
+	http.HandleFunc("/", ws.Home)
 	log.Fatal(http.ListenAndServe(*addr, nil))
+}
+func main() {
+    ws:=&WS{}
+    ws.Run()
 }
 
 var homeTemplate = template.Must(template.New("").Parse(`
